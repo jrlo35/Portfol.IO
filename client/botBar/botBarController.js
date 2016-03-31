@@ -22,7 +22,6 @@ angular.module('app.botbar', [])
 
     $rootScope.$emit('search');
     $rootScope.$on('off', function(){
-      console.log('yoyoyoyo')
       $scope.hasSearched = false;
     })
 
