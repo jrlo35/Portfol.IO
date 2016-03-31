@@ -4,7 +4,7 @@ var moment = require('moment')
 
 
 
-
+//get all league transactions for specific league 
 module.exports.getLeagueTransactionsfromDB = function (req,res) {
 
   	var portfolioid = req.body.data;
@@ -13,7 +13,6 @@ module.exports.getLeagueTransactionsfromDB = function (req,res) {
       $or: req.body.data
         }}).then(function(transactions){
         	transactions.forEach(function(transaction){
-        		console.log(transaction.symbol.toUpperCase(), transaction.shares, moment(transaction.createdAt).calendar(), '*********')
         		leagueTransactions.push({'symbol':transaction.symbol.toUpperCase(), 'portfolioid' : transaction.PortfolioId, 'buysell': transaction.shares, 'time': moment(transaction.createdAt).calendar()})
         	})
         	res.json(leagueTransactions);

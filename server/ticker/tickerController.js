@@ -7,7 +7,7 @@ var Watchlist = require('../../db/models').Watchlist;
 
 
 
-
+//yahoo finance query for all stocks in user's portfolios and watchlist
 module.exports.query = function(req, res){
  
   var stocks = req.body.stocks;
@@ -23,42 +23,33 @@ module.exports.query = function(req, res){
           ask.forEach(function(stock){
             result.push(stock.split(','));
           })
-          console.log(result,'resss')
           res.json(result);
-
   })
-
 }
 
 
-//find all stocks from user
+//find all user's portfolios
 
 module.exports.getPortfolioId = function (req, res) {
 
 	var response = [];
-    console.log(req.body.id,'********')
 	Portfolio.findAll({ where: {
                       userId: req.body.id
-                      
                     }})
     .then(function(portfolios){
     	
     	portfolios.forEach(function(portfolio){
-    		console.log(portfolio.id,'port')
     		response.push(portfolio.id)
     	})
-
-        console.log(response,'respppp')
         res.json(response);
-
     	})
-      
 }
 
+//get all stocks from user's portfolios and watchlist
 module.exports.getStocks = function (req,res){
+
     var companies = {};
     var results = []
-    console.log(req.body.ids, 'id')
 	Transaction.findAll({ where: { PortfolioId: 
 	 {
 		$in : req.body.ids 
@@ -74,9 +65,6 @@ module.exports.getStocks = function (req,res){
               results.push(company)
           	}
           }
-          console.log(results,'resulttsss')
           res.json(results)
         })
-      
-
 }

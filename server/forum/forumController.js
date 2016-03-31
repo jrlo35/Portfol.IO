@@ -1,6 +1,8 @@
 var Forum = require('../../db/models').Forum;
 
+//Add topic to forum table
 module.exports.addTopic = function (req, res){
+
   Forum.create({
     title: req.body.title,
     description: req.body.description,
@@ -16,8 +18,9 @@ module.exports.addTopic = function (req, res){
   })
 };
 
+//retrieve forum topic from forum table
 module.exports.getOneTopic = function(req, res){
-  console.log('WHAT IS IT????', req.body)
+
   Forum.findAll({where: {id: req.body.id}}).then(function (topic) {
     if(!topic) {
       res.send('No topics found.');
@@ -30,7 +33,9 @@ module.exports.getOneTopic = function(req, res){
   });
 };
 
+//retrieve all forum topics from forum table to display 
 module.exports.getAllTopics = function(req, res){
+
   Forum.findAll().then(function (topics) {
     if(!topics) {
       res.send('No topics found.');
