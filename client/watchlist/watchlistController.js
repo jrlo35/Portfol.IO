@@ -37,6 +37,7 @@ $scope.reload = function(){
   $scope.getWatchlist();
 };
 
+
 $scope.getStock = function(stock){
  $scope.symbolResults=[];
  var filter =[];
@@ -60,7 +61,7 @@ $scope.getStock = function(stock){
 
 };
 
-
+//Get watchlist and filter response
 $scope.getWatchlist = function (){
     $scope.watchlist =[];
     $scope.results=[];
@@ -109,6 +110,7 @@ $scope.getWatchlist = function (){
   });
 };
 
+ //remove from watchlist
   $scope.removeFromWatchlist = function (symbol){
 
     var userid = $window.localStorage.getItem('com.tp.userId');
@@ -126,6 +128,8 @@ $scope.getWatchlist = function (){
 
 $scope.stockSym = '';
 
+
+//Add to watchlist
   $scope.addStock = function (symbol){
     symbol = symbol.toUpperCase();
     $scope.userId = $window.localStorage.getItem('com.tp.userId');
@@ -145,6 +149,7 @@ $scope.stockSym = '';
   });
 };
 
+//click to view chart data
   $scope.sendToChart = function (symbol){
     $window.sym = symbol;
 

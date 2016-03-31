@@ -1,5 +1,7 @@
 var request = require('request');
 
+
+//yahoo finance query 
 module.exports.getStock = function(req, res){
 
 	var stockName = req.params.stockName;
@@ -7,7 +9,6 @@ module.exports.getStock = function(req, res){
 
 	request(query, function(err, stock){
     var stockinfo = stock.body.split(',');
-    console.log(stockinfo,'$$$$$$$$!!!!!')
     var stockask = {  Change: stockinfo[0],
                       PercentChange: stockinfo[1].split('\"')[1],
                       symbol: stockinfo[3].split('\"')[1],
@@ -28,9 +29,9 @@ module.exports.getStock = function(req, res){
 		//sending the stock information
 		res.send(stockask);
 	});
-
 }
 
+//yahoo finance query for bottom bar search
 module.exports.searchBar = function(req, res){
 
   var stockName = req.params.stockName;
@@ -46,7 +47,7 @@ module.exports.searchBar = function(req, res){
                       Volume: stockinfo[5] };
 
     if (err) { throw err; }
-    
+
     //sending the stock information
     res.send(stockask);
   });

@@ -1,5 +1,7 @@
 var Message = require('../../db/models').Message;
 
+
+//Add new message to database
 module.exports.addPostToDB = function (req, res){
 
   Message.create({
@@ -17,6 +19,7 @@ module.exports.addPostToDB = function (req, res){
   })
 };
 
+//retrieve all messages from database
 module.exports.getAllPosts = function(req, res){
   Message.findAll({where:{ leagueId: req.body.id }}).then(function (posts) {
     if(!posts) {
