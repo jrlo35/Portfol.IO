@@ -35,7 +35,6 @@ angular.module('app.botbar', [])
     Materialize.toast('Watchlist Updated', 3000);
     WatchlistFactory.getWatchlist($scope.userId)
     .then(function (list){
-      console.log(list,'list')
     })
     var data = {
       userid : $scope.userId,
