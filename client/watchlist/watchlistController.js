@@ -8,7 +8,7 @@ app.controller('WatchlistController', ['$scope', '$http', 'symbolFactory', 'Watc
 
 var userid = $window.localStorage.getItem('com.tp.userId');
 
-
+//Gives red and green coloring to percentages
 $scope.isPositive = function (val){
   if (!val) {
     return;
