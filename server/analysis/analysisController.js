@@ -1,6 +1,7 @@
 var fs = require('fs');
 var http = require('http-request');
 
+//gather stock data for dates
 module.exports.stockdata = function(req, res){
   var start = req.body.start.split('-');
   var end = req.body.end.split('-');
@@ -18,7 +19,7 @@ module.exports.stockdata = function(req, res){
 
 }
 
-
+//stock lookup with yahoo query
 module.exports.getinfo = function(req, res){
 
   http.get('http://finance.yahoo.com/d/quotes.csv?s='+req.body.symbol+'&f=reb4jkj1m3m4l1st8&ignore=.csv', function(err, response){
