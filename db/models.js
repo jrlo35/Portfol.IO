@@ -47,14 +47,8 @@ User.beforeCreate(function(user, options) {
   user.password = user.hashPassword();
 });
 
-// User.beforeUpdate(function(user, options) {
-//   user.password = user.hashPassword();
-// });
-
 var Watchlist = orm.define('Watchlist', {
   symbol: Sequelize.STRING
-
-
 });
 
 //Portfolio Model
@@ -93,21 +87,6 @@ var DirectMessage = orm.define('DirectMessage', {
   read: Sequelize.BOOLEAN,
   closed:  Sequelize.BOOLEAN
 });
-
-// var FriendRequest = orm.define('FriendRequest', {
-//   senderId: Sequelize.INTEGER,
-//   senderUsername: Sequelize.STRING,
-//   recipientId: Sequelize.INTEGER,
-//   recipientUsername: Sequelize.STRING
-// });
-
-// var Friend = orm.define('Friend', {
-//   friendOneId: Sequelize.INTEGER,
-//   friendOneUsername: Sequelize.STRING,
-//   friendTwoId: Sequelize.INTEGER,
-//   friendTwoUsername: Sequelize.STRING
-// });
-
 
 //Transaction Model
 var Transaction = orm.define('Transaction', {
@@ -219,10 +198,6 @@ Transaction.belongsTo(Portfolio);
 Portfolio.hasMany(Order);
 Order.belongsTo(Portfolio);
 
-// // Topic to Forum - One to Many
-// Forum.hasMany(Topic);
-// Topic.belongsTo(Forum);
-
 // User to DirectMessage - One to Many
 User.hasMany(DirectMessage);
 DirectMessage.belongsTo(User);
@@ -231,13 +206,6 @@ DirectMessage.belongsTo(User);
 User.hasMany(LeagueInvite);
 LeagueInvite.belongsTo(User);
 
-// // User to FriendRequest - One to Many
-// User.hasMany(FriendRequest);
-// FriendRequest.belongsTo(User);
-
-// // User to FriendRequest - One to Many
-// User.hasMany(Friend);
-// Friend.belongsTo(User);
 
 User.sync();
 League.sync();
@@ -266,8 +234,6 @@ exports.Forum = Forum;
 exports.Topic = Topic;
 exports.Order = Order;
 exports.Badge = Badge;
-// exports.Friend = Friend;
-// exports.FriendRequest = FriendRequest
 exports.DirectMessage = DirectMessage;
 exports.Badge = Badge;
 exports.Watchlist = Watchlist;
