@@ -3,6 +3,7 @@ var http = require('http-request');
 
 //gather stock data for dates
 module.exports.stockdata = function(req, res){
+  
   var start = req.body.start.split('-');
   var end = req.body.end.split('-');
 
