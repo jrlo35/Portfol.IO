@@ -19,6 +19,7 @@ describe("server", function() {
     });
   });
 
+
   describe("GET /dashboard", function () {
     it("should NOT return the content of dashboard.html when not logged in", function (done) {
       request

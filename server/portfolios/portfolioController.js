@@ -4,6 +4,7 @@ var config = require('../config/middleware.js');
 var request = require('request');
 var _ = require('underscore');
 
+//retrieve all users stocks in portfolio
 module.exports.getUserStocks = function(req, res){
 
   Portfolio.findOne({ where: {
@@ -23,8 +24,6 @@ module.exports.getUserStocks = function(req, res){
         return transaction.buysell && transaction.shares > 0;
       });
 
-      // console.log('updatedShares', updatedShares, 'reducedStocks', reducedStocks)
-
       res.send(reducedStocks);
 
     })
@@ -39,6 +38,7 @@ module.exports.getUserStocks = function(req, res){
 
 };
 
+//Refresh user's portfolio with latest market prices
 module.exports.updateUserStocks = function(req, res){
 
   Portfolio.findOne({ where: {
@@ -119,7 +119,6 @@ module.exports.updateUserStocks = function(req, res){
         portfolio.update({
           portfolioValue: portfolioValue
         })
-
        res.send({error:false});
       });
     })
@@ -127,15 +126,15 @@ module.exports.updateUserStocks = function(req, res){
       res.send("There was an error: ", err);
       return;
     });
-
   })
   .catch(function(err){
     res.send("There was an error: ", err);
   });
-
 };
 
+//retrieve user's portfolio from certain league
 module.exports.getPortfolio = function(req, res){
+  
   Portfolio.findOne({ where: {
     UserId: req.params.userId,
     leagueId: req.params.leagueId
@@ -147,8 +146,9 @@ module.exports.getPortfolio = function(req, res){
   });
 };
 
+// removing duplicates, adding the sum of all trades for same company
 function reduceStocks(stocks){
-  // removing duplicates, adding the sum of all trades for same company
+
   var storage = {};
   var finalArray = [];
 
@@ -179,7 +179,6 @@ function reduceStocks(stocks){
         percentage: storage[key][0].percentage,
         price: avgPrice / storage[key].length
       }
-
       finalArray.push(netStock);
     } else {
 
@@ -194,10 +193,8 @@ function reduceStocks(stocks){
         percentage: storage[key][0].percentage,
         price: storage[key][0].price
       }
-
       finalArray.push(netStock);
     }
   }
-
   return finalArray;
 }
