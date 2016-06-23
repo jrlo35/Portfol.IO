@@ -8,25 +8,26 @@ var dayOrder = require('./limitOrder').dayOrder;
 var publicLeagueAutoPilot = require('../leagues/leagueController').publicLeagueAutoPilot;
 
 module.exports = function (app, express) {
+
     "use strict";
   // Creating routers
-    var userRouter = express.Router();
-    var leagueRouter = express.Router();
-    var portfolioRouter = express.Router();
-    var stockRouter = express.Router();
-    var tweetRouter = express.Router();
-    var messageRouter = express.Router();
-    var transactionRouter = express.Router();
-    var symbolRouter = express.Router();
-    var forumRouter = express.Router();
-    var topicRouter = express.Router();
-    var leagueTransactionsRouter = express.Router();
+    var analysisRouter = express.Router();
     var badgeRouter = express.Router();
     var directMessageRouter = express.Router();
-    var WatchlistRouter = express.Router();
-    var analysisRouter = express.Router();
     var leagueInviteRouter = express.Router();
+    var leagueRouter = express.Router();
+    var leagueTransactionsRouter = express.Router();
+    var messageRouter = express.Router();
+    var portfolioRouter = express.Router();
+    var symbolRouter = express.Router();
+    var forumRouter = express.Router();
+    var stockRouter = express.Router();
+    var topicRouter = express.Router();
     var tickerRouter = express.Router();
+    var transactionRouter = express.Router();
+    var tweetRouter = express.Router();
+    var userRouter = express.Router();
+    var WatchlistRouter = express.Router();
 
     app.use(morgan('dev'));
     // Configuring middleware
