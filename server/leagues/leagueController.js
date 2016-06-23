@@ -11,6 +11,7 @@ var request = require('request');
 var badgeController = require('../badges/badgeController.js');
 
 module.exports.addLeague = function (req, res){
+  "use strict";
   var creatorId = req.body.creatorId;
   var creatorName = req.body.creatorName;
   var randomCode = null;
@@ -22,8 +23,8 @@ module.exports.addLeague = function (req, res){
 
   League.create({
     ownerid: creatorId,
-  	name: req.body.name,
-  	maxNum: req.body.max,
+    name: req.body.name,
+    maxNum: req.body.max,
     startbalance: req.body.balance,
     start:req.body.start,
     end: req.body.end,
@@ -53,15 +54,16 @@ module.exports.addLeague = function (req, res){
         console.log('successfully added');
       });
 
-  	res.send({id: league.id, name: league.name, private: league.private, code: league.code, maxNum: league.num, startbalance: league.balance});
+    res.send({id: league.id, name: league.name, private: league.private, code: league.code, maxNum: league.num, startbalance: league.balance});
   })
   .catch(function (err) {
-  	console.error('Error creating league: ', err.message);
-  	res.end();
+    console.error('Error creating league: ', err.message);
+    res.end();
   });
 };
 
 module.exports.joinLeague = function (req, res){
+  "use strict";
   var temp = {};
   User.findOne({ where: {id : req.body.userId }})
     .then(function(user){
@@ -93,7 +95,7 @@ module.exports.joinLeague = function (req, res){
 };
 
 module.exports.userLeagues = function(req, res){
-
+  "use strict";
   Portfolio.findAll({ where: { userId: req.body.userId }})
     .then(function(portfolio){
       if(!portfolio){
@@ -109,34 +111,37 @@ module.exports.userLeagues = function(req, res){
 };
 
 module.exports.getAllLeagues = function (req, res) {
+  "use strict";
 
   League.findAll({})
   .then(function (leagues) {
-  	if(!leagues) {
-  		console.log('No leagues found.');
-  		res.end();
-  	} else {
-  		res.json(leagues);
-  	}
+      if(!leagues) {
+      console.log('No leagues found.');
+      res.end();
+    } else {
+      res.json(leagues);
+    }
   })
   .catch(function (err) {
-  	console.error('Error getting leagues: ', err);
+    console.error('Error getting leagues: ', err);
     return;
   });
 };
 
 module.exports.getOneLeague = function (req, res) {
-	League.findById(req.params.id)
-	.then(function (league) {
-		res.send(league);
-	})
-	.catch(function (err) {
-		console.error('Error getting league: ', err);
+  "use strict";
+  League.findById(req.params.id)
+  .then(function (league) {
+    res.send(league);
+  })
+    .catch(function (err) {
+    console.error('Error getting league: ', err);
     return;
-	});
+  });
 };
 
 module.exports.editOneLeague = function (req, res) {
+  "use strict";
   League.findById(req.params.id)
   .then(function (league) {
 
@@ -170,6 +175,7 @@ module.exports.editOneLeague = function (req, res) {
 };
 
 module.exports.getUsers = function(req, res){
+  "use strict";
   var leagueId = req.body.leagueId;
   // Gets the most up to date values for the portfolios
   // And update the rankings
@@ -191,6 +197,7 @@ module.exports.getUsers = function(req, res){
 };
 
 module.exports.getLeagueByOwnerId = function(req, res){
+  "use strict";
   var userId = req.params.userId;
 
   League.findAll({
@@ -207,6 +214,8 @@ module.exports.getLeagueByOwnerId = function(req, res){
 };
 
 module.exports.deleteLeagueById = function(req, res){
+
+  "use strict";
   var leagueId;
   var leagueName;
 

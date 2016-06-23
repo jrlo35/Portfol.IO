@@ -1,20 +1,19 @@
-var Portfolio = require('../../db/models').Portfolio;
 var Transaction = require('../../db/models').Transaction;
-var moment = require('moment')
+var moment = require('moment');
 
 
-
-//get all league transactions for specific league 
-module.exports.getLeagueTransactionsfromDB = function (req,res) {
-
-  	var portfolioid = req.body.data;
+//get all league transactions for specific league
+module.exports.getLeagueTransactionsfromDB = function (req, res) {
+    "use strict";
+    var portfolioId = req.body.data;
     var leagueTransactions = [];
-      Transaction.findAll({ where: {
-      $or: req.body.data
-        }}).then(function(transactions){
-        	transactions.forEach(function(transaction){
-        		leagueTransactions.push({'symbol':transaction.symbol.toUpperCase(), 'portfolioid' : transaction.PortfolioId, 'buysell': transaction.shares, 'time': moment(transaction.createdAt).calendar()})
-        	})
-        	res.json(leagueTransactions);
-    })
-}
+
+    Transaction.findAll({where: {
+      $or: portfolioId
+    }}).then(function (transactions) {
+        transactions.forEach(function (transaction) {
+            leagueTransactions.push({symbol: transaction.symbol.toUpperCase(), portfolioId: transaction.PortfolioId, buysell: transaction.shares, time: moment(transaction.createdAt).calendar()});
+        });
+        res.json(leagueTransactions);
+    });
+};

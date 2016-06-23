@@ -1,9 +1,10 @@
 var analysisController = require('./analysisController.js');
 
-module.exports = function(app){
+module.exports = function (app) {
 
-  app.post('/', analysisController.stockdata);
+    "use strict";
+    app.post('/', analysisController.stockdata);
 
-  app.post('/getinfo', analysisController.getinfo);
+    app.post('/getinfo', analysisController.getinfo);
 
 };

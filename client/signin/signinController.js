@@ -8,7 +8,8 @@ app
       show: '='
     },
     replace: true,
-    link: function(scope, element, attrs) {
+    link: function (scope, element, attrs) {
+      
       scope.dialogStyle = {};
       if (attrs.width) {
         scope.dialogStyle.width = attrs.width;
@@ -55,6 +56,7 @@ app
   return {
     restrict: 'E',
     scope: {
+      //object passed to directive
       show: '='
     },
     replace: true,

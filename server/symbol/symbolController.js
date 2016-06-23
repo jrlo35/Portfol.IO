@@ -4,22 +4,23 @@ var Portfolio = require('../../db/models').Portfolio;
 var Transaction = require('../../db/models').Transaction;
 var Watchlist = require('../../db/models').Watchlist;
 
-module.exports.getSymbol = function(req, res){
+module.exports.getSymbol = function (req, res) {
+    "use strict";
+    var company = req.params.company;
+    var query = "http://d.yimg.com/aq/autoc?query=" + company + "&region=US&lang=en-US";
 
-  var company = req.params.company;
-  var query = "http://d.yimg.com/aq/autoc?query=" + company + "&region=US&lang=en-US";
+    request(query, function(err, result){
+      if (err) {
+        throw err;
+      }
+      res.send(result.body);
+    });
 
-  request(query, function(err, result){
-    if (err) {
-      throw err;
-    }
-    res.send(result.body);
-  })
-
-}
+};
 
 
-module.exports.limitOrder = function(){
+module.exports.limitOrder = function () {
+  "use strict";
   setInterval(function(){
     Order.findAll({ where: { executed: false }})
       .then(function(orders){
@@ -52,7 +53,7 @@ module.exports.limitOrder = function(){
   }, 4000)
 }
 
-function placeOrder (trade){
+function placeOrder (trade) {
   trade.PortfolioId = trade.portfolioId;
   Order.create(trade);
 }

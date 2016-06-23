@@ -8,8 +8,9 @@ var Watchlist = require('../../db/models').Watchlist;
 
 
 //yahoo finance query for all stocks in user's portfolios and watchlist
-module.exports.query = function(req, res){
- 
+module.exports.query = function (req, res) {
+
+  "use strict";
   var stocks = req.body.stocks;
   var result = [];
 
@@ -19,8 +20,8 @@ module.exports.query = function(req, res){
         }
         http.get('http://finance.yahoo.com/d/quotes.csv?s=' + list + '&f=sc1p2a', function(err, response){
           var ask = response.buffer.toString().split('\n');
-          
-          ask.forEach(function(stock){
+
+          ask.forEach(function (stock) {
             result.push(stock.split(','));
           })
           res.json(result);
@@ -32,38 +33,38 @@ module.exports.query = function(req, res){
 
 module.exports.getPortfolioId = function (req, res) {
 
-	var response = [];
-	Portfolio.findAll({ where: {
+  var response = [];
+  Portfolio.findAll({ where: {
                       userId: req.body.id
                     }})
-    .then(function(portfolios){
-    	
-    	portfolios.forEach(function(portfolio){
-    		response.push(portfolio.id)
-    	})
+    .then(function (portfolios) {
+
+      portfolios.forEach(function (portfolio) {
+        response.push(portfolio.id)
+      })
         res.json(response);
-    	})
+      })
 }
 
 //get all stocks from user's portfolios and watchlist
-module.exports.getStocks = function (req,res){
+module.exports.getStocks = function (req,res) {
 
     var companies = {};
     var results = []
-	Transaction.findAll({ where: { PortfolioId: 
-	 {
-		$in : req.body.ids 
-	  }
-	}
+    Transaction.findAll({ where: { PortfolioId:
+  {
+    $in : req.body.ids
+    }
+  }
         })
-        .then(function(transactions){
-          transactions.forEach(function (transaction){
+        .then(function (transactions) {
+          transactions.forEach(function (transaction) {
             companies[transaction.symbol] = transaction.shares
           })
           for(var company in companies){
-          	if(companies[company] > 0){
+            if(companies[company] > 0){
               results.push(company)
-          	}
+            }
           }
           res.json(results)
         })

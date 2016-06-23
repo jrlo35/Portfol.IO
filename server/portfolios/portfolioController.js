@@ -5,52 +5,54 @@ var request = require('request');
 var _ = require('underscore');
 
 //retrieve all users stocks in portfolio
-module.exports.getUserStocks = function(req, res){
+module.exports.getUserStocks = function (req, res) {
 
+  "use strict";
   Portfolio.findOne({ where: {
     UserId: req.params.userId,
     leagueId: req.params.leagueId
-  }}).then(function(portfolio){
+  }}).then(function (portfolio) {
 
     Transaction.findAll({ where: {
       PortfolioId: portfolio.id
-    }}).then(function(transactions){
+    }}).then(function (transactions) {
 
       // minimizes doubles, adds all shares from same company
       var updatedShares = reduceStocks(transactions);
 
       // returns only the bought shares
-      var reducedStocks = _.filter(updatedShares, function(transaction){
+      var reducedStocks = _.filter(updatedShares, function (transaction) {
         return transaction.buysell && transaction.shares > 0;
       });
 
       res.send(reducedStocks);
 
     })
-    .catch(function(err){
+    .catch(function (err) {
       res.send("There was an error: ", err);
     });
 
   })
-  .catch(function(err){
+  .catch(function (err) {
     res.send("There was an error: ", err);
   });
 
 };
 
 //Refresh user's portfolio with latest market prices
-module.exports.updateUserStocks = function(req, res){
+module.exports.updateUserStocks = function (req, res) {
 
+  "use strict";
   Portfolio.findOne({ where: {
     UserId: req.params.userId,
     leagueId: req.params.leagueId
-  }}).then(function(portfolio){
+  }}).then(function (portfolio) {
 
     Transaction.findAll({ where: {
       PortfolioId: portfolio.id
-    }}).then(function(transactions){
+    }}).then(function (transactions) {
 
-      if (transactions.length < 1){ res.send({error:null}); return }
+      if (transactions.length < 1){ res.send({error:null}); return;}
 
       var portfolioValue = 0;
 
@@ -64,7 +66,7 @@ module.exports.updateUserStocks = function(req, res){
 
       // creates a list of all user stocks in order to query
       var stockNames = [];
-      reducedStocks.forEach(function(stock){
+      reducedStocks.forEach(function (stock) {
         if(stockNames.indexOf(stock.symbol) < 0){
           stockNames.push(stock.symbol);
         }
@@ -74,7 +76,7 @@ module.exports.updateUserStocks = function(req, res){
       var query = "https://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20yahoo.finance.quotes%20where%20symbol%20%3D%20%27"+ stockNames +"%27&diagnostics=false&env=store%3A%2F%2Fdatatables.org%2Falltableswithkeys&format=json";
 
       // querying user stocks
-      request(query, function(err, stocks){
+      request(query, function (err, stocks) {
         stocks.body = JSON.parse(stocks.body);
 
         // Too many queries instantaneously cause API to fail, sends error emit to client
@@ -134,7 +136,7 @@ module.exports.updateUserStocks = function(req, res){
 
 //retrieve user's portfolio from certain league
 module.exports.getPortfolio = function(req, res){
-  
+
   Portfolio.findOne({ where: {
     UserId: req.params.userId,
     leagueId: req.params.leagueId

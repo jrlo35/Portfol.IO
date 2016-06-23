@@ -78,8 +78,9 @@ app.controller('AnalysisController', ['$scope', 'WatchlistFactory','AnalysisFact
     stock.start = moment(stock.start).format("YYYY-MM-DD").toString();
     AnalysisFactory.getchart(stock)
       .then(function(){
+        //select like jquery
         d3.select('#the_SVG_ID').remove();
-
+//append name of tag and attributes
         var svg = d3.select("#wow").append("svg").attr("id","the_SVG_ID")
             .attr("width", width + margin.left + margin.right)
             .attr("height", height + margin.top + margin.bottom)

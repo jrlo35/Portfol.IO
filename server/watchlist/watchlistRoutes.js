@@ -1,12 +1,14 @@
 var watchlistController = require('./watchlistController.js');
 
-module.exports = function(app){
-  
-  app.post('/', watchlistController.addToWatchlist);
+module.exports = function (app) {
+	
+    "use strict";
 
-  app.get('/:userid', watchlistController.getWatchlist);
+    app.post('/', watchlistController.addToWatchlist);
 
-  app.post('/array', watchlistController.updateWatchlist);
+    app.get('/:userid', watchlistController.getWatchlist);
 
-  app.post('/remove', watchlistController.removeFromWatchlist);
-}
+    app.post('/array', watchlistController.updateWatchlist);
+
+    app.post('/remove', watchlistController.removeFromWatchlist);
+};

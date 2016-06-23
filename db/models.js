@@ -1,21 +1,20 @@
 var Sequelize = require('sequelize');
 var bcrypt = require('bcrypt-nodejs');
-var Promise = require('bluebird');
 
 var salt = bcrypt.genSaltSync(10);
 
 //JAWSDB for Heroku deployment
-if (process.env.DEPLOYED === 'TRUE'){
-  var orm = new Sequelize(process.env.JAWSDB_URL);
+if (process.env.DEPLOYED === 'TRUE') {
+    var orm = new Sequelize(process.env.JAWSDB_URL);
 } else {
-  var orm = new Sequelize('Pistonsdb', 'root', '');
+    var orm = new Sequelize('Pistonsdb', 'root', '');
 }
 
 //User Model
 var User = orm.define('User', {
-	 username: {
-		type: Sequelize.STRING,
-		unique: true
+    username: {
+        type: Sequelize.STRING,
+        unique: true
     },
     // Badge related behavior
     badgeJoined: Sequelize.BOOLEAN,
@@ -27,131 +26,136 @@ var User = orm.define('User', {
     leaguesJoined: Sequelize.INTEGER,
 
     email: {
-    	type: Sequelize.STRING,
-    	unique:true
+        type: Sequelize.STRING,
+        unique: true
     },
     password: Sequelize.STRING,
     image: Sequelize.TEXT
-  }, {
+}, {
     instanceMethods: {
-      hashPassword: function() {
-      return bcrypt.hashSync(this.password, salt);
-    },
-      validPassword: function(inputpass, pass) {
-      return bcrypt.compareSync(inputpass, pass);
+        hashPassword: function () {
+            "use strict";
+            return bcrypt.hashSync(this.password, salt);
+        },
+        validPassword: function (inputpass, pass) {
+
+            "use strict";
+            return bcrypt.compareSync(inputpass, pass);
+        }
     }
-  }
 });
 
-User.beforeCreate(function(user, options) {
-  user.password = user.hashPassword();
+User.beforeCreate(function (user) {
+
+    "use strict";
+    user.password = user.hashPassword();
 });
 
 var Watchlist = orm.define('Watchlist', {
-  symbol: Sequelize.STRING
+    symbol: Sequelize.STRING
 });
 
 //Portfolio Model
 var Portfolio = orm.define('Portfolio', {
-	balance: Sequelize.INTEGER,
-  portfolioValue: Sequelize.FLOAT,
-  numOfTrades: Sequelize.INTEGER,
-  username: Sequelize.STRING,
-  leaguename: Sequelize.STRING,
-  rank: Sequelize.INTEGER,
-  leagueEnded: Sequelize.BOOLEAN,
-  returnPercentage: Sequelize.FLOAT
+    balance: Sequelize.INTEGER,
+    portfolioValue: Sequelize.FLOAT,
+    numOfTrades: Sequelize.INTEGER,
+    username: Sequelize.STRING,
+    leaguename: Sequelize.STRING,
+    rank: Sequelize.INTEGER,
+    leagueEnded: Sequelize.BOOLEAN,
+    returnPercentage: Sequelize.FLOAT
 });
 
 // Forum & Topics Model
 var Forum = orm.define('Forum', {
-  title: Sequelize.STRING,
-  description: Sequelize.STRING,
-  creatorName: Sequelize.STRING,
-  creatorId: Sequelize.INTEGER
+    title: Sequelize.STRING,
+    description: Sequelize.STRING,
+    creatorName: Sequelize.STRING,
+    creatorId: Sequelize.INTEGER
 });
 
 var Topic = orm.define('Topic', {
-  topicId: Sequelize.INTEGER,
-  message: Sequelize.TEXT,
-  userName: Sequelize.STRING,
-  userId: Sequelize.STRING
+    topicId: Sequelize.INTEGER,
+    message: Sequelize.TEXT,
+    userName: Sequelize.STRING,
+    userId: Sequelize.STRING
 });
 
 // DirectMessage
 var DirectMessage = orm.define('DirectMessage', {
-  username: Sequelize.STRING,
-  recipientId: Sequelize.INTEGER,
-  recipientUsername: Sequelize.STRING,
-  message: Sequelize.TEXT,
-  read: Sequelize.BOOLEAN,
-  closed:  Sequelize.BOOLEAN
+    username: Sequelize.STRING,
+    recipientId: Sequelize.INTEGER,
+    recipientUsername: Sequelize.STRING,
+    message: Sequelize.TEXT,
+    read: Sequelize.BOOLEAN,
+    closed: Sequelize.BOOLEAN
 });
 
 //Transaction Model
 var Transaction = orm.define('Transaction', {
 
-	symbol: Sequelize.STRING,
-  company: Sequelize.STRING,
-	price: Sequelize.FLOAT,
-  marketPrice: Sequelize.FLOAT,
-  return: Sequelize.FLOAT,
-	buysell: Sequelize.BOOLEAN,
-  shares: Sequelize.INTEGER
+    symbol: Sequelize.STRING,
+    company: Sequelize.STRING,
+    price: Sequelize.FLOAT,
+    marketPrice: Sequelize.FLOAT,
+    return: Sequelize.FLOAT,
+    buysell: Sequelize.BOOLEAN,
+    shares: Sequelize.INTEGER
 
 });
 
 //Order Model
 var Order = orm.define('Order', {
 
-  symbol: Sequelize.STRING,
-  company: Sequelize.STRING,
-  price: Sequelize.FLOAT,
-  buysell: Sequelize.BOOLEAN,
-  shares: Sequelize.INTEGER,
-  executed: Sequelize.BOOLEAN,
-  dayorder: Sequelize.BOOLEAN
+    symbol: Sequelize.STRING,
+    company: Sequelize.STRING,
+    price: Sequelize.FLOAT,
+    buysell: Sequelize.BOOLEAN,
+    shares: Sequelize.INTEGER,
+    executed: Sequelize.BOOLEAN,
+    dayorder: Sequelize.BOOLEAN
 
 });
 
 //Message Board Model
 
 var Message = orm.define('Message', {
-  name: Sequelize.STRING,
-  message: Sequelize.STRING
+    name: Sequelize.STRING,
+    message: Sequelize.STRING
 });
 
 
 //League Model
 var League = orm.define('league', {
-  ownerid: Sequelize.INTEGER,
-	name: Sequelize.STRING,
-  maxNum: Sequelize.INTEGER,
-  startbalance: Sequelize.FLOAT,
-  start: Sequelize.STRING,
-  end: Sequelize.STRING,
-  private: Sequelize.BOOLEAN,
-  code: Sequelize.STRING,
-  duration: Sequelize.STRING,
-  hasEnded: Sequelize.BOOLEAN
+    ownerid: Sequelize.INTEGER,
+    name: Sequelize.STRING,
+    maxNum: Sequelize.INTEGER,
+    startbalance: Sequelize.FLOAT,
+    start: Sequelize.STRING,
+    end: Sequelize.STRING,
+    private: Sequelize.BOOLEAN,
+    code: Sequelize.STRING,
+    duration: Sequelize.STRING,
+    hasEnded: Sequelize.BOOLEAN
 });
 
 // Badges
 var Badge = orm.define('Badge', {
-  name: {type: Sequelize.STRING, unique: true},
-  text: Sequelize.STRING,
-  icon: Sequelize.STRING
+    name: {type: Sequelize.STRING, unique: true},
+    text: Sequelize.STRING,
+    icon: Sequelize.STRING
 });
 
 //League Invite
 var LeagueInvite = orm.define('LeagueInvite', {
-  receiverId: Sequelize.INTEGER,
-  leaguename: Sequelize.STRING,
-  leagueId: Sequelize.STRING,
-  username: Sequelize.STRING,
-  read: Sequelize.BOOLEAN,
-  start: Sequelize.STRING,
-  end: Sequelize.STRING
+    receiverId: Sequelize.INTEGER,
+    leaguename: Sequelize.STRING,
+    leagueId: Sequelize.STRING,
+    username: Sequelize.STRING,
+    read: Sequelize.BOOLEAN,
+    start: Sequelize.STRING,
+    end: Sequelize.STRING
 });
 
 //Join table for League and user
@@ -173,8 +177,8 @@ League.hasMany(Message);
 Message.belongsTo(League);
 
 //League to User - Many to Many
-League.belongsToMany(User, { through: 'League_user'});
-User.belongsToMany(League, { through: 'League_user'});
+League.belongsToMany(User, {through: 'League_user'});
+User.belongsToMany(League, {through: 'League_user'});
 
 //League to Portfolio - One to Many
 League.hasMany(Portfolio);
@@ -229,8 +233,8 @@ exports.League = League;
 exports.Portfolio = Portfolio;
 exports.Transaction = Transaction;
 exports.Message = Message;
-exports.orm = orm;
 exports.Forum = Forum;
+exports.orm = orm;
 exports.Topic = Topic;
 exports.Order = Order;
 exports.Badge = Badge;

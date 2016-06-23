@@ -1,12 +1,12 @@
 
-app.controller('SymbolController', ['$scope', '$http', 'WatchlistFactory','symbolFactory', 'Portfolio', '$rootScope', '$window',function($scope, $http, WatchlistFactory, symbolFactory, Portfolio, $rootScope, $window){
+app.controller('SymbolController', ['$scope', '$http', 'WatchlistFactory','symbolFactory', 'Portfolio', '$rootScope', '$window',function ($scope, $http, WatchlistFactory, symbolFactory, Portfolio, $rootScope, $window) {
 
 
   $scope.stockName;
 
   $scope.results=[];
   // function to find stock symbol by stock name
-  $scope.getStock = function(stock){
+  $scope.getStock = function (stock) {
 
    $scope.results=[];
    var filter =[];
@@ -30,13 +30,14 @@ app.controller('SymbolController', ['$scope', '$http', 'WatchlistFactory','symbo
 
   };
   //once symbol retrieved, this function can add it directly to watchlist
-  $scope.addToWatchlist = function (symbol){
+  $scope.addToWatchlist = function (symbol) {
+
     $scope.userId = $window.localStorage.getItem('com.tp.userId');
 
     Materialize.toast('Watchlist Updated', 3000);
     WatchlistFactory.getWatchlist($scope.userId)
 
-    .then(function (list){
+    .then(function (list) {
       return;
     });
 
@@ -59,7 +60,8 @@ app.controller('SymbolController', ['$scope', '$http', 'WatchlistFactory','symbo
     $('#modal1').closeModal();
   };
   // functionality to populate buy/sell symbol field with symbol
-  $scope.populate = function(symbol){
+  $scope.populate = function (symbol) {
+
     $rootScope.$emit('symbolRetrieved', symbol);
     $scope.closeModal();
   };

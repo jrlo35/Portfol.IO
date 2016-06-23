@@ -1,6 +1,7 @@
 app.factory('AnalysisFactory', function($http){
 
-  var getchart = function(stock){
+  var getchart = function (stock) {
+    
     return $http({
       method: 'POST',
       url: '/api/analysis',
@@ -10,20 +11,21 @@ app.factory('AnalysisFactory', function($http){
     });
   };
 
-  var getinfo = function(stock){
+  var getinfo = function (stock) {
+
     return $http({
       method: 'POST',
       url: '/api/analysis/getinfo',
       data: stock
     })
-    .then(function(stock){
+    .then(function (stock) {
       return stock.data;
     });
   };
-
+  
   return {
     getchart: getchart,
-    getinfo: getinfo
+    getinfo: getinfo,
   };
 
 });

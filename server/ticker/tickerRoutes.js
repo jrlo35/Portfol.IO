@@ -1,12 +1,13 @@
 var tickerController = require('./tickerController.js');
 
-module.exports = function(app){
+module.exports = function (app) {
 
-  app.post('/', tickerController.getPortfolioId);
+    "use strict";
+    app.post('/', tickerController.getPortfolioId);
 
-  app.post('/stocks', tickerController.getStocks);
+    app.post('/stocks', tickerController.getStocks);
 
-  app.post('/stockquote', tickerController.query);
+    app.post('/stockquote', tickerController.query);
 
-  
-}
+
+};

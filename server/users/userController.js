@@ -40,8 +40,8 @@ module.exports.newUser = function (req, res){
           })
           .catch(function (err) {
             res.send('Error creating user: ', err);
-          });        
-      }else{
+          });
+      } else {
         res.json('Username already exist');
       }
     })
@@ -136,7 +136,7 @@ module.exports.deleteUser= function (req, res) {
 };
 
 //user login verification and give token to client
-module.exports.signIn = function (req, res){
+module.exports.signIn = function (req, res) {
   User.findOne({where:{ email: req.body.email }})
     .then(function (user) {
       if(!user){
@@ -160,7 +160,7 @@ module.exports.signIn = function (req, res){
 };
 
 //add profile image in to database
-module.exports.profileImage = function(req, res){
+module.exports.profileImage = function (req, res) {
   User.findOne({where:{ id: req.body.userId }})
     .then(function(user){
       if(user){
@@ -175,7 +175,7 @@ module.exports.profileImage = function(req, res){
 }
 
 //update Email
-module.exports.updateEmail = function (req, res){
+module.exports.updateEmail = function (req, res) {
   
   User.findOne({where: {id: req.body.userId }})
     .then(function(user){
@@ -205,7 +205,7 @@ module.exports.updateEmail = function (req, res){
 };
 
 //update password
-module.exports.updatePW = function (req, res){
+module.exports.updatePW = function (req, res) {
 
   User.findOne({where: {id: req.body.userId }})
     .then(function(user){

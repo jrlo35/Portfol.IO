@@ -1,6 +1,6 @@
 
 var app = angular.module('app');
-app.controller('WatchlistController', ['$scope', '$http', 'symbolFactory', 'WatchlistFactory',  '$rootScope', '$location','$window', function($scope, $http, symbolFactory, WatchlistFactory,  $rootScope, $location,$window){
+app.controller('WatchlistController', ['$scope', '$http', 'symbolFactory', 'WatchlistFactory',  '$rootScope', '$location','$window', function ($scope, $http, symbolFactory, WatchlistFactory,  $rootScope, $location, $window) {
 
   $scope.watchlist = [];
   $scope.results =[];
@@ -9,7 +9,8 @@ app.controller('WatchlistController', ['$scope', '$http', 'symbolFactory', 'Watc
 var userid = $window.localStorage.getItem('com.tp.userId');
 
 //Gives red and green coloring to percentages
-$scope.isPositive = function (val){
+$scope.isPositive = function (val) {
+
   if (!val) {
     return;
   }
@@ -38,18 +39,20 @@ $scope.reload = function(){
 };
 
 
-$scope.getStock = function(stock){
+$scope.getStock = function (stock) {
+  
  $scope.symbolResults=[];
- var filter =[];
- var symbol;
-  symbolFactory.getCompany(stock).then(function(data){
+  var filter =[];
+  var symbol;
+  symbolFactory.getCompany(stock).then(function (data) {
+
     var sym = data.data.ResultSet.Result;
     for(var j=0;j<sym.length;j++){
        if(sym[j].exchDisp === 'NYSE' || sym[j].exchDisp === 'NASDAQ'){
          filter.push(sym[j]);
        }
     }
-    if(!filter.length){
+    if(!filter.length) {
       Materialize.toast('Company could not be found on NYSE or NASDAQ! Check for spaces and punctuation', 5000);
     }
 
@@ -62,24 +65,26 @@ $scope.getStock = function(stock){
 };
 
 //Get watchlist and filter response
-$scope.getWatchlist = function (){
+$scope.getWatchlist = function () {
+  
     $scope.watchlist =[];
     $scope.results=[];
 
   	WatchlistFactory.getWatchlist(userid)
 
-  	.then(function (list){
-      for(var stock in list.data){
+  	.then(function (list) {
+      for(var stock in list.data) {
         $scope.watchlist.push(stock);
       }
 
     WatchlistFactory.updateWatchlist($scope.watchlist)
-    .then(function (stocks){
+    .then(function (stocks) {
 
       stocks.data.pop();
-      stocks.data.forEach(function(stock){
+      stocks.data.forEach(function (stock) {
+ 
+        stock.forEach(function (result) {
 
-        stock.forEach(function(result){
           var result1 = result.replace(/\"/g,'');
           if(/[\%]/.test(result1)){
 
@@ -88,13 +93,13 @@ $scope.getWatchlist = function (){
             var decimal = res.substr(1)
             var ans = parseFloat(decimal).toFixed(2)
             var final = sign + ans.toString()
-            result1=final.concat('%')
+            result1 = final.concat('%')
 
           }
           else if(/[\-]/.test(result1)){
             var range = [];
             result1 = result1.split('-');
-            result1.forEach(function(num){
+            result1.forEach(function (num) {
               result1 = parseFloat(num).toFixed(2);
               range.push(result1);
             })
@@ -111,7 +116,7 @@ $scope.getWatchlist = function (){
 };
 
  //remove from watchlist
-  $scope.removeFromWatchlist = function (symbol){
+  $scope.removeFromWatchlist = function (symbol) {
 
     var userid = $window.localStorage.getItem('com.tp.userId');
 
@@ -130,34 +135,36 @@ $scope.stockSym = '';
 
 
 //Add to watchlist
-  $scope.addStock = function (symbol){
+  $scope.addStock = function (symbol) {
+
     symbol = symbol.toUpperCase();
     $scope.userId = $window.localStorage.getItem('com.tp.userId');
 
     Materialize.toast('Watchlist Updated', 3000);
     WatchlistFactory.getWatchlist($scope.userId)
-    .then(function (list){
+    .then(function (list) {
     });
     var data = {
       userid : $scope.userId,
       symbol : symbol
     };
   symbolFactory.addToWatchlist(data)
-  .then(function(){
+  .then(function () {
     $rootScope.$emit('addedToWatchlist');
     $scope.stockSym = '';
   });
 };
 
 //click to view chart data
-  $scope.sendToChart = function (symbol){
+  $scope.sendToChart = function (symbol) {
+
     $window.sym = symbol;
 
     $location.path('/analysis');
   };
 
 
-  $rootScope.$on('addedToWatchlist', function(){
+  $rootScope.$on('addedToWatchlist', function () {
 
     $scope.getWatchlist();
   });

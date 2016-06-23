@@ -1,7 +1,8 @@
 var symbolController = require('./symbolController.js');
 
-module.exports = function(app){
+module.exports = function (app) {
+    "use strict";
 
-  app.get('/:company', symbolController.getSymbol);
+    app.get('/:company', symbolController.getSymbol);
 
-}
+};

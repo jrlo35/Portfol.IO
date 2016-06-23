@@ -1,8 +1,9 @@
 var leagueTransactionsController = require('./leagueTransactionsController.js');
 
 
-module.exports = function(app){
+module.exports = function (app) {
+    "use strict";
 
-  app.post('/', leagueTransactionsController.getLeagueTransactionsfromDB);
+    app.post('/', leagueTransactionsController.getLeagueTransactionsfromDB);
 
-}
+};

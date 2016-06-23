@@ -4,12 +4,13 @@ var Transaction = require('../../db/models').Transaction;
 var http = require('http-request');
 var moment = require('moment');
 
-module.exports.limitOrder = function(){
-  setInterval(function(){
+module.exports.limitOrder = function () {
+  "use strict";
+  setInterval(function () {
     Order.findAll({ where: { executed: false }})
-      .then(function(orders){
+      .then(function (orders) {
         var list = ' ';
-        for(var i=0; i<orders.length; i++){
+        for(var i = 0; i<orders.length; i++) {
           list+=orders[i].dataValues.symbol + '+';
         }
         http.get('http://finance.yahoo.com/d/quotes.csv?s=' + list + '&f=sa', function(err, res){
@@ -46,10 +47,10 @@ function placeOrder (trade){
 }
 
 function placeTrade (trade){
-  Transaction.create(trade).then(function(transaction){
+  Transaction.create(trade).then(function (transaction) {
 
     Portfolio.findOne({ where: { id: trade.portfolioId }})
-    .then(function(portfolio){
+    .then(function (portfolio) {
 
       if (!transaction.buysell) { transaction.shares = -1 * transaction.shares; }
 
@@ -74,27 +75,27 @@ function placeTrade (trade){
       portfolio.save();
 
     })
-    .catch(function(err){
+    .catch(function (err) {
       console.log("Error")
     });
 
   })
-  .catch(function(err){
+  .catch(function (err) {
       console.log("Error")
   });
 }
 
-module.exports.dayOrder = function(){
-  setInterval(function(){
+module.exports.dayOrder = function (){
+  setInterval(function (){
     var now = moment().utc().format("HH:mm:ss");
     if(now == '07:00:00'){
       Order.destroy({ where: { dayorder: true }})
-        .catch(function(err){
-            console.log("ERRORERROR")
+        .catch(function (err) {
+            console.log("error")
         });
       Order.destroy({ where: { executed: true }})
-        .catch(function(err){
-            console.log("ERRORERROR")
+        .catch(function (err) {
+            console.log("error")
         });
     };
   }, 1000)
