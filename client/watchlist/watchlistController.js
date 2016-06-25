@@ -1,7 +1,17 @@
 
-var app = angular.module('app');
-app.controller('WatchlistController', ['$scope', '$http', 'symbolFactory', 'WatchlistFactory',  '$rootScope', '$location','$window', function ($scope, $http, symbolFactory, WatchlistFactory,  $rootScope, $location, $window) {
+(function () {
 
+  'use strict';
+
+  angular
+    .module('app');
+    .controller('WatchlistController', WatchlistController);
+
+  WatchlistController.$inject = ['$scope', '$http', 'symbolFactory', 'WatchlistFactory',  '$rootScope', '$location','$window']
+  function WatchlistController($scope, $http, symbolFactory, WatchlistFactory,  $rootScope, $location, $window) {
+
+
+    } 
   $scope.watchlist = [];
   $scope.results =[];
   $scope.stock=[];
@@ -41,7 +51,7 @@ $scope.reload = function(){
 
 $scope.getStock = function (stock) {
   
- $scope.symbolResults=[];
+ $scope.symbolResults = [];
   var filter =[];
   var symbol;
   symbolFactory.getCompany(stock).then(function (data) {
@@ -66,13 +76,13 @@ $scope.getStock = function (stock) {
 
 //Get watchlist and filter response
 $scope.getWatchlist = function () {
-  
+
     $scope.watchlist =[];
     $scope.results=[];
 
-  	WatchlistFactory.getWatchlist(userid)
+    WatchlistFactory.getWatchlist(userid)
 
-  	.then(function (list) {
+    .then(function (list) {
       for(var stock in list.data) {
         $scope.watchlist.push(stock);
       }
@@ -86,17 +96,17 @@ $scope.getWatchlist = function () {
         stock.forEach(function (result) {
 
           var result1 = result.replace(/\"/g,'');
-          if(/[\%]/.test(result1)){
+          if(/[\%]/.test(result1)) {
 
-            var res = result1.replace(/\%/,'')
+            var res = result1.replace(/\%/,'');
             var sign = res[0];
-            var decimal = res.substr(1)
-            var ans = parseFloat(decimal).toFixed(2)
-            var final = sign + ans.toString()
-            result1 = final.concat('%')
+            var decimal = res.substr(1);
+            var ans = parseFloat(decimal).toFixed(2);
+            var final = sign + ans.toString();
+            result1 = final.concat('%');
 
           }
-          else if(/[\-]/.test(result1)){
+          else if(/[\-]/.test(result1)) {
             var range = [];
             result1 = result1.split('-');
             result1.forEach(function (num) {
@@ -108,7 +118,7 @@ $scope.getWatchlist = function () {
           $scope.stock.push(result1);
         })
 
-          $scope.results.push($scope.stock);
+        $scope.results.push($scope.stock);
         $scope.stock=[];
       });
     });
@@ -170,3 +180,5 @@ $scope.stockSym = '';
   });
   $scope.getWatchlist();
 }]);
+})()
+
