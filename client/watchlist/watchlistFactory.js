@@ -6,6 +6,8 @@
     .module('app')
     .factory('WatchlistFactory', WatchlistFactory);
 
+  WatchlistFactory.$inject = ['$http'];
+
   function WatchlistFactory($http) {
 
     return {
@@ -22,8 +24,8 @@
       function getWatchlistComplete(data) {
         var watchlist = [];
         for(var stock in data.data) {
-            watchlist.push(stock);
-          }
+          watchlist.push(stock);
+        }
         return watchlist;
       }
     
@@ -33,19 +35,19 @@
     }
 
     function updateWatchlist(array) {
-      return $http({
-        method: 'POST',
-        url:'/api/watchlist/array',
-        data: array
-      });
+      return $http.post('/api/watchlist/array', array)
+      
     }
+      function getWatchlistFailed(err) {
+        console.error(err);
+      }
 
     function removeFromWatchlist(data) {
-      return $http({
-        method:'POST',
-        url: '/api/watchlist/remove',
-        data: data
-       });
+      return $http.post('/api/watchlist/remove', data)
+        
     }
+      function getWatchlistFailed(err) {
+        console.error(err);
+      }
   }
 })()

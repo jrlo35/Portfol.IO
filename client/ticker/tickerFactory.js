@@ -32,21 +32,13 @@
 	  }
 
 	  function getAllUserStocks(data) {
-
-	  	return $http({
-	  		method: 'POST',
-	  		url: '/api/ticker/stocks',
-	  		data: {ids: data}
-	  	});
+	  	return $http.post('/api/ticker/stocks', {ids: data})
+	  		
 	  }
 
-	  function stocksQuery (data) {
-
-	  	return $http({
-	  		method: 'POST',
-	  		url: '/api/ticker/stockquote',
-	  		data: {stocks: data}
-	  	});
+	  function stocksQuery(data) {
+	  	return $http.post('/api/ticker/stockquote', {stocks: data})
+	  		
 	  }
 	  
 	});
