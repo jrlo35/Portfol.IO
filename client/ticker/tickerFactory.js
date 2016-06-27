@@ -33,11 +33,31 @@
 
 	  function getAllUserStocks(data) {
 	  	return $http.post('/api/ticker/stocks', {ids: data})
+	  	  .then(getAllUserStocksComplete)
+	  	  .catch(getAllUserStocksFailed)
+
+	  	function getAllUserStocksComplete() {
+
+	  	}
+
+	  	function getAllUserStocksFailed(err){
+        console.error(err);
+	  	}
 	  		
 	  }
 
 	  function stocksQuery(data) {
 	  	return $http.post('/api/ticker/stockquote', {stocks: data})
+	  	  .then(stocksQueryComplete)
+	  	  .catch(stocksQueryFailed)
+
+	  	function stocksQueryComplete() {
+
+	  	}
+
+	  	function stocksQueryFailed(err) {
+        console.error(err);
+	  	}
 	  		
 	  }
 	  

@@ -2,77 +2,48 @@
 
 angular
   .module('app')
+  .controller('SigninController', SigninController)
+
+SigninController.$inject = ['$scope', '$window', 'Auth', 'DirectMessage', '$rootScope', 'DashboardFactory', 'LeagueInvite'];
+
+function SigninController ($scope, $window, Auth, DirectMessage, $rootScope, DashboardFactory, LeagueInvite) {
+
+  vm = this;
+  vm.authorize = authorize;
+  vm.forgot = forgot;
+  vm.forgotpassword = forgotpassword;
+  vm.signup = signup;
+  vm.toggleForgot = toggleForgot;
+  vm.toggleLogin = toggleLogin;
+  vm.toggleSignup = toggleSignup;
 
 
-//signin signup controller
-  .controller('SigninController', ['$scope', '$window', 'Auth', 'DirectMessage', '$rootScope', 'DashboardFactory', 'LeagueInvite', function($scope, $window, Auth, DirectMessage, $rootScope, DashboardFactory, LeagueInvite){
-  $scope.user = {};
-  $scope.id = $window.localStorage.getItem('com.tp.userId') || undefined;
+  vm.user = {};
+  vm.id = $window.localStorage.getItem('com.tp.userId') || undefined;
 
-  $scope.username;
-
-
-  $scope.authorize = function(){
-    if(Auth.isAuth()){
-      $scope.loggedin = true;
-      $scope.username = $window.localStorage.getItem('com.tp.username');
-    }else{
-      $scope.loggedin = false;
-    }
+  vm.username;
+  //toggle signup modal directive
+  vm.showsignup = false;
+  function toggleSignup() {
+    vm.showsignup = !vm.showsignup;
   };
 
-  $scope.authorize();
-
-  $rootScope.$on('deleted', function(){
-    $scope.loggedin = false;
-  });
-
-  $scope.showsignup = false;
-  $scope.toggleSignup = function() {
-    $scope.showsignup = !$scope.showsignup;
+  vm.showlogin = false;
+  function toggleLogin() {
+    vm.showlogin = !vm.showlogin;
   };
 
-  $scope.showlogin = false;
-  $scope.toggleLogin = function() {
-    $scope.showlogin = !$scope.showlogin;
+  vm.showforgot = false;
+  function toggleForgot() {
+    vm.showforgot = !vm.showforgot;
+    vm.emailsent = false;
   };
 
-  $scope.showforgot = false;
-  $scope.toggleForgot = function() {
-    $scope.showforgot = !$scope.showforgot;
-    $scope.emailsent = false;
-  };
-
-  $scope.forgot = function(){
-    $scope.toggleLogin();
-    $scope.toggleForgot();
-  };
-
-  $scope.emailsent = false;
-  $scope.forgotpassword = function(email){
-    if(email) $window.localStorage.setItem('email', email);
-    if(!email) email = $window.localStorage.getItem('email');
-    Auth.forgotpw(email)
-      .then(function(data){
-        if(data === 'User not found'){
-          Materialize.toast('Cannot find the email you entered', 1000);
-        }else{
-          $scope.emailsent = true;
-        }
-      });
-  };
-
-  //clear out input fields
-  $scope.clearsignup = function(){
-    $scope.user.username = '';
-    $scope.user.password = '';
-    $scope.user.email = '';
-  };
-
-  //new user signup
-  $scope.signup = function(user){
+  
+    //new user signup
+  function signup(user) {
     Auth.createuser(user)
-      .then(function(data){
+      .then(function(data) {
         if(data === 'Email already in use'){
           Materialize.toast('Email already in use.', 2000);
           $scope.clearsignup();
@@ -92,8 +63,59 @@ angular
       });
   };
 
+
+  
+
+
+  function authorize(){
+    if(Auth.isAuth()){
+      $scope.loggedin = true;
+      $scope.username = $window.localStorage.getItem('com.tp.username');
+    }else{
+      $scope.loggedin = false;
+    }
+  };
+
+  $scope.authorize();
+
+  $rootScope.$on('deleted', function(){
+    $scope.loggedin = false;
+  });
+
+  
+
+
+
+  function forgot(){
+    $scope.toggleLogin();
+    $scope.toggleForgot();
+  };
+
+  $scope.emailsent = false;
+  function forgotpassword(email){
+    if(email) $window.localStorage.setItem('email', email);
+    if(!email) email = $window.localStorage.getItem('email');
+    Auth.forgotpw(email)
+      .then(function(data){
+        if(data === 'User not found'){
+          Materialize.toast('Cannot find the email you entered', 1000);
+        }else{
+          $scope.emailsent = true;
+        }
+      });
+  };
+
+  //clear out input fields
+  function clearsignup(){
+    $scope.user.username = '';
+    $scope.user.password = '';
+    $scope.user.email = '';
+  };
+
+  
+
   //user login
-  $scope.signin = function(user){
+  function signin(user){
     Auth.loginuser(user).then(function(data){
       if(data === 'User not found'){
         Materialize.toast('No user found.', 2000);
@@ -118,7 +140,7 @@ angular
   };
 
   //remove everything from localstorage
-  $scope.logout = function(user){
+  function logout(user){
     $scope.loggedin = false;
     $window.localStorage.removeItem('com.tp');
     $window.localStorage.removeItem('com.tp.userId');
@@ -127,7 +149,7 @@ angular
   };
 
   //get all user's leagues
-  $scope.getUserLeagues = function () {
+  function getUserLeagues() {
     var userId = $window.localStorage.getItem('com.tp.userId');
     DashboardFactory.getUserLeagues(userId)
       .then(function(userLeagues){
@@ -196,7 +218,7 @@ angular
     setInterval(updateMessageCenter, 3000);
   }
 
-  $scope.notdone = function(league){
+  function notdone(league){
     return !league.leagueEnded;
   };
 

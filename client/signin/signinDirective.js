@@ -1,7 +1,6 @@
-
 (function () {
 
-
+"use strict";
 
 angular
   .module('app')
@@ -9,15 +8,11 @@ angular
 	//modal for signup
 	.directive('signupDirective', function() {
 	  return {
-	    //element
 	    restrict: 'E',
 	    scope: {
-	      //show is object, two way binding
 	      show: '='
 	    },
-	    //replace element called on
 	    replace: true,
-	    //post link function
 	    link: function (scope, element, attrs) {
 
 	      scope.dialogStyle = {};
@@ -33,7 +28,7 @@ angular
 	    },
 	    //
 	    transclude: true,
-	    //template that replaces element
+	    //template that replaces element ng-show = $scope.show is truthy binds to show variable and show attribute ng-style =object to inline style
 	    template: "<div class='ng-modal' ng-show='show'><div class='ng-modal-overlay' ng-click='hidesignup()'></div><div class='ng-modal-dialog' ng-style='dialogStyle'><div class='ng-modal-dialog-content' ng-transclude></div></div></div>"
 	  };
 	})
