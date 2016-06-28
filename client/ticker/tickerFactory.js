@@ -36,14 +36,18 @@
 	  	  .then(getAllUserStocksComplete)
 	  	  .catch(getAllUserStocksFailed)
 
-	  	function getAllUserStocksComplete() {
-
+	  	function getAllUserStocksComplete(stocks) {
+	  		var userStocks = [];
+	  		var allUserStocks = stocks.data;
+        allUserStocks.forEach(function (stock) {
+          userStocks.push(stock.toUpperCase());
+	  	  })
+	  	  return userStocks;
 	  	}
 
 	  	function getAllUserStocksFailed(err){
         console.error(err);
 	  	}
-	  		
 	  }
 
 	  function stocksQuery(data) {
@@ -51,8 +55,31 @@
 	  	  .then(stocksQueryComplete)
 	  	  .catch(stocksQueryFailed)
 
-	  	function stocksQueryComplete() {
+	  	function stocksQueryComplete(allStockInfo) {
+	  		var finalStocks = [];
+	  		var parsedStocks = [];
+        allStockInfo.data.pop();
+        allStockInfo.data.forEach(function (stock) {
 
+          stock.forEach(function (result) {
+
+            var parsedResult = result.replace(/\"/g,'');
+            if(/[\%]/.test(parsedResult)) {
+
+              var res = parsedResult.replace(/\%/,'');
+              var sign = res[0];
+              var decimal = res.substr(1);
+              var round = parseFloat(decimal).toFixed(2);
+              var final = sign + round.toString();
+              parsedResult = final.concat('%');
+            }
+            parsedStocks.push(parsedResult);
+       	  })
+
+          finalstocks.push(parsedStocks)
+          parsedStocks = [];
+        })
+        return finalStocks;
 	  	}
 
 	  	function stocksQueryFailed(err) {

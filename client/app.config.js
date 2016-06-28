@@ -163,6 +163,7 @@ app.factory('AttachTokens', function ($window) {
     // then look in local storage and find the user's token
     // then add it to the header so the server can validate the request
     "use strict";
+
     var attach = {
       request: function (object) {
 
@@ -185,6 +186,7 @@ app.factory('AttachTokens', function ($window) {
 // and send that token to the server to see if it is a real user or hasn't expired
 // if it's not valid, we then redirect back to signin/signup
     "use strict";
+    
     $rootScope.$on('$stateChangeStart', function (evt, next, current) {
   // if (next.$$state && next.$$state.authenticate && !Auth.isAuth()) {
         if (!Auth.isAuth()) {
