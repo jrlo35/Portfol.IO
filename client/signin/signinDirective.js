@@ -1,12 +1,14 @@
 (function () {
 
-"use strict";
+	"use strict";
 
-angular
-  .module('app')
+	angular
+	  .module('app')
+		.directive('signupDirective', signupDirective)
+		.directive('loginDirective', loginDirective)
+		.directive('forgotDirective', forgotDirective);
 
-	//modal for signup
-	.directive('signupDirective', function() {
+	function signupDirective() {
 	  return {
 	    restrict: 'E',
 	    scope: {
@@ -26,15 +28,14 @@ angular
 	        scope.show = false;
 	      };
 	    },
-	    //
 	    transclude: true,
 	    //template that replaces element ng-show = $scope.show is truthy binds to show variable and show attribute ng-style =object to inline style
 	    template: "<div class='ng-modal' ng-show='show'><div class='ng-modal-overlay' ng-click='hidesignup()'></div><div class='ng-modal-dialog' ng-style='dialogStyle'><div class='ng-modal-dialog-content' ng-transclude></div></div></div>"
-	  };
-	})
+		  };
+	}
 
 	//modal for login
-	.directive('loginDirective', function() {
+	function loginDirective() {
 	  return {
 	    restrict: 'E',
 	    scope: {
@@ -56,10 +57,10 @@ angular
 	    transclude: true,
 	    template: "<div class='ng-modal' ng-show='show'><div class='ng-modal-overlay' ng-click='hidelogin()'></div><div class='ng-modal-dialog' ng-style='dialogStyle'><div class='ng-modal-dialog-content' ng-transclude></div></div></div>"
 	  };
-	})
+	}
 
 	//modal for forgot password
-	.directive('forgotDirective', function() {
+	function forgotDirective() {
 	  return {
 	    restrict: 'E',
 	    scope: {
@@ -82,6 +83,5 @@ angular
 	    transclude: true,
 	    template: "<div class='ng-modal' ng-show='show'><div class='ng-modal-overlay' ng-click='hideforgot()'></div><div class='ng-modal-dialog' ng-style='dialogStyle'><div class='ng-modal-dialog-content' ng-transclude></div></div></div>"
 	  };
-	})
-
+	}
 })()

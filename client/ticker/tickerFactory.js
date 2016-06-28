@@ -10,16 +10,26 @@
 
   function TickerFactory ($http) {
 
-  	return {
+  	var tickerService = {
+  		displayTicker: displayTicker,
 	  	getAllUserStocks: getAllUserStocks,
 	  	getAllPortfolioId: getAllPortfolioId,
 	  	stocksQuery: stocksQuery
 	  };
+	  return tickerService;
+
+	  function displayTicker(finalStocks) {
+	  	var boxes = [];
+	  	for(var i = 0; i < finalStocks.length; i++) {
+        boxes.push(finalStocks[i]);
+      }
+      return boxes;
+	  }
 
 		function getAllPortfolioId(userID) {
       return $http.post('/api/ticker/', {id: userID})
         .then(getAllPortfolioIdComplete)
-        .catch(getAllPortfolioIdFailed)
+        .catch(getAllPortfolioIdFailed);
 
       function getAllPortfolioIdComplete(data) {
         var usersPortfolios = data.data;
@@ -76,7 +86,7 @@
             parsedStocks.push(parsedResult);
        	  })
 
-          finalstocks.push(parsedStocks)
+          finalstocks.push(parsedStocks);
           parsedStocks = [];
         })
         return finalStocks;
