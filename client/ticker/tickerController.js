@@ -1,5 +1,5 @@
 (function () {
-  
+
   "use strict";
 
   angular
@@ -8,7 +8,7 @@
   
   TickerController.$inject = ['$http', 'TickerFactory','SymbolFactory', 'WatchlistFactory',  '$rootScope', '$location','$window', '$timeout', '$interval'];
     
-  function TickerController($http, TickerFactory, SymbolFactory, WatchlistFactory,  $rootScope, $location, $window, $timeout, $interval) {
+  function TickerController ($http, TickerFactory, SymbolFactory, WatchlistFactory,  $rootScope, $location, $window, $timeout, $interval) {
     var vm = this;
 
     vm.boxes = [];
@@ -20,11 +20,11 @@
     
     activate();
 
-    function activate() {
+    function activate () {
       return getAllPortfolioId();
     }
 
-    function getAllPortfolioId() {
+    function getAllPortfolioId () {
       var userId = $window.localStorage.getItem('com.tp.userId');
 
       //watchlist stocks
@@ -91,7 +91,7 @@
         $rootScope.$emit('off');
       }, 15000);
 
-    function showError(err) {
+    function showError (err) {
       console.error(err);
     }
     });

@@ -3,12 +3,12 @@
   "use strict";
 
   angular
-    .module('app');
+    .module('app')
 		.factory('TickerFactory', TickerFactory);
     
   TickerFactory.$inject = ['$http'];
 
-  function TickerFactory($http) {
+  function TickerFactory ($http) {
   	var tickerService = {
   		displayTicker: displayTicker,
 	  	getAllUserStocks: getAllUserStocks,
@@ -17,35 +17,35 @@
 	  };
 	  return tickerService;
 
-	  function displayTicker(finalStocks) {
+	  function displayTicker (finalStocks) {
 	  	var boxes = [];
-	  	for(var i = 0; i < finalStocks.length; i++) {
-        boxes.push(finalStocks[i]);
-      }
+	  	finalStocks.forEach(function (stock) {
+	  		boxes.push(stock);
+	  	})
       return boxes;
 	  }
 
-		function getAllPortfolioId(userID) {
-      return $http.post('/api/ticker/', {id: userID})
+		function getAllPortfolioId (userId) {
+      return $http.post('/api/ticker/', {id: userId})
         .then(getAllPortfolioIdComplete)
         .catch(getAllPortfolioIdFailed);
 
-      function getAllPortfolioIdComplete(data) {
+      function getAllPortfolioIdComplete (data) {
         var usersPortfolios = data.data;
         return usersPortfolios;
       }
       
-      function getAllPortfolioIdFailed(err) {
+      function getAllPortfolioIdFailed (err) {
       	console.error(err);
       }
 	  }
 
-	  function getAllUserStocks(data) {
+	  function getAllUserStocks (data) {
 	  	return $http.post('/api/ticker/stocks', {ids: data})
 	  	  .then(getAllUserStocksComplete)
 	  	  .catch(getAllUserStocksFailed)
 
-	  	function getAllUserStocksComplete(stocks) {
+	  	function getAllUserStocksComplete (stocks) {
 	  		var userStocks = [];
 	  		var allUserStocks = stocks.data;
         allUserStocks.forEach(function (stock) {
@@ -53,17 +53,17 @@
 	  	  })
 	  	  return userStocks;
 	  	}
-	  	function getAllUserStocksFailed(err){
+	  	function getAllUserStocksFailed (err){
         console.error(err);
 	  	}
 	  }
-
-	  function stocksQuery(data) {
+ 
+	  function stocksQuery (data) {
 	  	return $http.post('/api/ticker/stockquote', {stocks: data})
 	  	  .then(stocksQueryComplete)
 	  	  .catch(stocksQueryFailed)
 
-	  	function stocksQueryComplete(allStockInfo) {
+	  	function stocksQueryComplete (allStockInfo) {
 	  		var finalStocks = [];
 	  		var parsedStocks = [];
         allStockInfo.data.pop();
@@ -86,7 +86,7 @@
         return finalStocks;
 	  	}
 
-	  	function stocksQueryFailed(err) {
+	  	function stocksQueryFailed (err) {
         console.error(err);
 	  	}
 	  }

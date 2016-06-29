@@ -4,9 +4,9 @@
 
 	angular
 	  .module('app')
-		.directive('signupDirective', signupDirective)
+		.directive('signupDirective', signupDirective);
 
-	function signupDirective() {
+	function signupDirective () {
 	  return {
 	    restrict: 'E',
 	    scope: {
@@ -21,7 +21,7 @@
 	      if (attrs.height) {
 	        scope.dialogStyle.height = attrs.height;
 	      }
-	      scope.hidesignup = function() {
+	      scope.hidesignup = function () {
 	        scope.show = false;
 	      };
 	    },

@@ -28,7 +28,9 @@ module.exports.getWatchlist = function (req, res) {
   var userId = parseInt(req.params.userid);
   var userWatchlist = {};
 
-  Watchlist.findAll({where: {UserId: userId}})
+  Watchlist.findAll({
+    where: {UserId: userId}
+  })
   .then(function (list) {
     list.forEach(function (stock) {
       userWatchlist[stock.symbol] = stock.symbol;
@@ -44,19 +46,19 @@ module.exports.getWatchlist = function (req, res) {
 module.exports.updateWatchlist = function (req, res) {
 
   "use strict";
-
-  var watchlist = req.body;
+  
+  var listStocks = '';
   var results = [];
-  var list ='';
-  var stocks={};
+  var stocks = {};
+  var watchlist = req.body;
 
-  for (var i = 0; i < watchlist.length; i++) {
-          list += watchlist[i] + '+';
-  }
+  watchlist.forEach(function (stock) {
+    listStocks += stock + '+';
+  })
 
-  list = list.slice(0,-1);
+  listStocks = listStocks.slice(0,-1);
 
-  http.get('http://finance.yahoo.com/d/quotes.csv?s=' + list + '&f=saopp2mw', function (err, response) {
+  http.get('http://finance.yahoo.com/d/quotes.csv?s=' + listStocks + '&f=saopp2mw', function (err, response) {
 
     if (err) {
       res.send("There was an error: ", err);
