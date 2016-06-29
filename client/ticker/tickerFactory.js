@@ -8,8 +8,7 @@
     
   TickerFactory.$inject = ['$http'];
 
-  function TickerFactory ($http) {
-
+  function TickerFactory($http) {
   	var tickerService = {
   		displayTicker: displayTicker,
 	  	getAllUserStocks: getAllUserStocks,
@@ -54,7 +53,6 @@
 	  	  })
 	  	  return userStocks;
 	  	}
-
 	  	function getAllUserStocksFailed(err){
         console.error(err);
 	  	}
@@ -70,12 +68,9 @@
 	  		var parsedStocks = [];
         allStockInfo.data.pop();
         allStockInfo.data.forEach(function (stock) {
-
           stock.forEach(function (result) {
-
             var parsedResult = result.replace(/\"/g,'');
             if(/[\%]/.test(parsedResult)) {
-
               var res = parsedResult.replace(/\%/,'');
               var sign = res[0];
               var decimal = res.substr(1);
@@ -85,7 +80,6 @@
             }
             parsedStocks.push(parsedResult);
        	  })
-
           finalstocks.push(parsedStocks);
           parsedStocks = [];
         })
@@ -95,8 +89,6 @@
 	  	function stocksQueryFailed(err) {
         console.error(err);
 	  	}
-	  		
 	  }
-	  
 	};
 }()

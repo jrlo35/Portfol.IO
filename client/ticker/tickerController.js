@@ -1,4 +1,5 @@
 (function () {
+  
   "use strict";
 
   angular
@@ -28,7 +29,6 @@
 
       //watchlist stocks
       WatchlistFactory.getWatchlist(userId)
-
       	.then(function (watchlist) {
           vm.stocks = watchlist;
         })
@@ -37,7 +37,6 @@
       //get all users stocks in all portfolios
       TickerFactory.getAllPortfolioId(userId)
       .then(function (usersPortfolios) {
-
         TickerFactory.getAllUserStocks(usersPortfolios)
         .then(function (stocks) {
           vm.stocks.concat(stocks);
@@ -55,7 +54,7 @@
               vm.moving = false;
               function moveLeft() {
                 vm.moving = true;
-                $interval(function() {
+                $interval(function () {
                   if (vm.moving) {
                     vm.boxes.push(vm.boxes.shift());
                   }
@@ -68,7 +67,6 @@
           })
           .catch(showError);
         })
-        .catch(showError);
     }
 
     //chage color base on positive or negative price change
@@ -92,6 +90,10 @@
         vm.ticker = true;
         $rootScope.$emit('off');
       }, 15000);
+
+    function showError(err) {
+      console.error(err);
+    }
     });
   }
 })();
