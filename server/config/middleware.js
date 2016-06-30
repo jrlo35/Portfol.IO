@@ -1,16 +1,16 @@
-var passport = require('passport');
 var bodyParser = require('body-parser');
-var session = require('express-session');
 var cookieParser = require('cookie-parser');
-var morgan = require('morgan');
-var limitOrder = require('./limitOrder').limitOrder;
 var dayOrder = require('./limitOrder').dayOrder;
+var limitOrder = require('./limitOrder').limitOrder;
+var morgan = require('morgan');
+var passport = require('passport');
 var publicLeagueAutoPilot = require('../leagues/leagueController').publicLeagueAutoPilot;
+var session = require('express-session');
 
 module.exports = function (app, express) {
 
     "use strict";
-  // Creating routers
+    // Creating routers
     var analysisRouter = express.Router();
     var badgeRouter = express.Router();
     var directMessageRouter = express.Router();

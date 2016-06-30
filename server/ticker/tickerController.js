@@ -19,6 +19,11 @@ module.exports.query = function (req, res) {
   stockList = stockList.slice(0,-1);
 
   http.get('http://finance.yahoo.com/d/quotes.csv?s=' + stockList + '&f=sc1p2a', function (err, response) {
+    
+    if (err) {
+      res.status(500).send("There was an error: ", err);
+    }
+
     var ask = response.buffer.toString().split('\n');
     ask.forEach(function (stock) {
       result.push(stock.split(','));
@@ -38,36 +43,47 @@ module.exports.getPortfolioId = function (req, res) {
   Portfolio.findAll({
     where: {
       userId: userId
-      }
+    }
+  })
+  .then(function (portfolios) {
+    portfolios.forEach(function (portfolio) {
+      response.push(portfolio.id);
     })
-    .then(function (portfolios) {
-      portfolios.forEach(function (portfolio) {
-        response.push(portfolio.id)
-      })
-      res.json(response);
-    })
+    res.json(response);
+  })
+  .catch(function (err) {
+    res.send("There was an error: ", err);
+  });
 }
 
 //get all stocks from user's portfolios and watchlist
 module.exports.getStocks = function (req,res) {
-    var companies = {};
-    var results = []
-    Transaction.findAll({
-      where: {
-        PortfolioId: {
-          $in : req.body.ids
-        }
+
+  "use strict";
+
+  var companies = {};
+  var results = [];
+  var portfolioIds = req.body.ids;
+
+  Transaction.findAll({
+    where: {
+      PortfolioId: {
+        $in : portfolioIds
       }
+    }
+  })
+  .then(function (transactions) {
+    transactions.forEach(function (transaction) {
+      companies[transaction.symbol] = transaction.shares
     })
-    .then(function (transactions) {
-      transactions.forEach(function (transaction) {
-        companies[transaction.symbol] = transaction.shares
-      })
-      for(var company in companies){
-        if(companies[company] > 0){
-          results.push(company)
-        }
+    for(var company in companies){
+      if(companies[company] > 0){
+        results.push(company)
       }
-      res.json(results)
-    })
+    }
+    res.json(results)
+  })
+  .catch(function (err) {
+    res.send("There was an error: ", err);
+  });
 }

@@ -40,13 +40,9 @@
         <ul id="nav-mobile" class="right hide-on-med-and-down">
 
           <li style="padding-right: 15px" ng-show="loggedin"><span class="red-text text-lighten-2">Welcome, {{username[0].toUpperCase()+username.slice(1)}}!</span></li>
-
           <li style="padding-right: 5px"><a href="#/messages" ng-show="loggedin">Messages<span ng-if="unreadMessages || unreadInvites" class="badge circle red white-text">{{unreadMessages+unreadInvites}}</span></a></li>
-
           <li ng-show="loggedin" style="padding-right: 15px">
-
             <a href="#/dashboard" class="dropdown-button" data-hover="true" data-activates="dropdown2" data-constrainwidth="false" data-beloworigin="true">Dashboard</a>
-
           </li>
 
             <ul ng-show="loggedin" id="dropdown2" class="dropdown-content">
@@ -66,15 +62,11 @@
           </ul>
 
           <li ng-controller="ClockController as clock" ng-bind="time" class="col s2 clock teal-text text-lighten-4"></li>
-
           <li><a ng-show="!loggedin" ng-click="toggleLogin()">Login</a></li>
 <!--here-->
           <li><a ng-show="!loggedin" ng-click="toggleSignup()">Sign Up</a></li>
-
           <li ng-show="loggedin" style="padding-right: 15px">
-
             <a href="#/account" class="dropdown-button" data-hover="true" data-activates="dropdown3" data-constrainwidth="false" data-beloworigin="true">My Account</a>
-
           </li>
 
           <ul id="dropdown3" class="dropdown-content">
