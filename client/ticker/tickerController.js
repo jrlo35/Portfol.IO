@@ -86,7 +86,7 @@
 
     $rootScope.$on('search', function () {
       vm.ticker = false;
-      setTimeout(function () {
+      $timeout(function () {
         vm.ticker = true;
         $rootScope.$emit('off');
       }, 15000);

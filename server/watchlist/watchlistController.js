@@ -54,7 +54,7 @@ module.exports.updateWatchlist = function (req, res) {
 
   watchlist.forEach(function (stock) {
     listStocks += stock + '+';
-  })
+  });
 
   listStocks = listStocks.slice(0,-1);
 

@@ -9,9 +9,10 @@ module.exports.buySell = function (req, res) {
 
   Transaction.create(req.body).then(function (transaction) {
 
-    Portfolio.findOne({where: {
-      UserId: req.body.userId,
-      leagueId: req.body.leagueId
+    Portfolio.findOne({
+      where: {
+        UserId: req.body.userId,
+        leagueId: req.body.leagueId
       }
     })
     .then(function (portfolio) {
@@ -19,13 +20,11 @@ module.exports.buySell = function (req, res) {
       if (!transaction.buysell) {
         transaction.shares = -1 * transaction.shares;
       }
-
       var amount = transaction.price * transaction.shares;
 
       //amount is either subtracted or added to portfolioValue depending on if sold or bought
       portfolio.portfolioValue += amount;
       portfolio.balance -= (amount + 10);
-
 
       //Setting the transaction's PortfolioId
       transaction.PortfolioId = portfolio.id;
@@ -43,12 +42,10 @@ module.exports.buySell = function (req, res) {
       res.send(transaction);
     })
     .catch(function (err) {
-  
       res.send('Error: ', err);
     });
   })
   .catch(function (err) {
-          
     res.send('Error: ', err);
   });
 };
@@ -125,14 +122,15 @@ module.exports.getOrders = function (req, res) {
 module.exports.cancelOrder = function (req, res) {
 
   "use strict";
-  Order.destroy({where: {id: req.body.id
+
+  Order.destroy({
+    where: {id: req.body.id
     }
   })
   .then(function () {
     res.send("Succesfully canceld order");
   })
   .catch(function (err) {
-  
     res.send('Error:', err);
   });
 };
@@ -142,29 +140,27 @@ module.exports.cancelOrder = function (req, res) {
 module.exports.getTransactions = function (req, res) {
 
   "use strict";
-  Portfolio.findOne({where: {
+
+  Portfolio.findOne({
+    where: {
       UserId: req.params.userId,
       leagueId: req.params.leagueId
     }
   })
   .then(function (portfolio) {
-
-    Transaction.findAll({where: {
-      PortfolioId: portfolio.id
+    Transaction.findAll({
+      where: {
+        PortfolioId: portfolio.id
       }
     })
     .then(function (transactions) {
-
       res.send(transactions);
     })
     .catch(function (err) {
-      
       res.send("There was an error: ", err);
     });
-
   })
   .catch(function (err) {
-          
     res.send("There was an error: ", err);
   });
 };

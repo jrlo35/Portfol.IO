@@ -4,7 +4,7 @@
   'use strict';
 
   angular
-    .module('app');
+    .module('app')
     .controller('WatchlistController', WatchlistController);
 
   WatchlistController.$inject = ['$scope', '$http', 'symbolFactory', 'WatchlistFactory',  '$rootScope', '$location','$window']
@@ -178,6 +178,12 @@ $scope.stockSym = '';
 
     $scope.getWatchlist();
   });
+  function activate() {
+    return WatchlistFactory.getWatchlist().then(function(data) {
+
+      return 
+    })
+  }
   $scope.getWatchlist();
 }]);
 })()

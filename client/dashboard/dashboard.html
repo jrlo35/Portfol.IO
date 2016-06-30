@@ -65,7 +65,7 @@
             <div class="card-content">
               <span class="card-title">What?</span>
               <p>It looks like you haven't joined any leagues yet. :(
-                <br> Don't worry. It's incredibly easy to get started.</p>
+                <br /> Don't worry. It's incredibly easy to get started.</p>
             </div>
             <div class="card-action">
               <a style="color: red; cursor:pointer;"ng-click="showToJoin()">Check Out Available Leagues</a>
@@ -113,19 +113,19 @@
       <div ng-if="showadd" class="signup">
         <h4 class="brand-logo">Private League </h4>
         <form name="addleagueForm" ng-submit='addLeague(league)'>
-          <br>
-          <label>Name:</label><br>
+          <br />
+          <label>Name:</label><br />
           <input type='text' ng-model='league.name' required>
-          <br>
-          <label>Max User #: </label><br>
+          <br />
+          <label>Max User #: </label><br />
           <input type="text" ng-model='league.max' required>
-          <br>
-          <label>Buying Power: </label><br>
+          <br />
+          <label>Buying Power: </label><br />
           <input type="text" ng-change="ll()" ng-model='league.balance' required>
-          <br>
-          <label>Start: </label><br>
+          <br />
+          <label>Start: </label><br />
           <input type="date" id="startdate" ng-model='league.start' ng-click="pickstart()" format-date required>
-          <label>End Date: </label><br>
+          <label>End Date: </label><br />
           <input type="date" id="enddate" ng-model='league.end' ng-click="pickend()" format-date required>
 
           <button class="waves-effect waves-light btn std-btn center">Create</button>

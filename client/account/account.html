@@ -33,8 +33,8 @@
                   <img ng-show="!file" src="{{image}}">
                   <img ng-show="file" ngf-thumbnail="file" width="200px">
                 </span>
-                <br>
-                <br>
+                <br />
+                <br />
                 <div ng-claok  ng-show="!image"><md-button class="btn waves-effect waves-light" ngf-select="upload($file)">Upload Profile Photo</md-button></div>
                 <div ng-claok ng-show="image"><md-button class="btn waves-effect waves-light" ngf-select="upload($file)">Upload New Profile Photo</md-button></div>
               </li>
@@ -81,7 +81,7 @@
               <li ng-repeat="league in leagues" class="collection-item avatar">
                 <img src="../assets/img/money.png" alt="" class="circle">
                 <span class="title">{{ league.name}} <span class="red-text" ng-if="league.private">(PRIVATE) - code: {{ league.code }}</span></span>
-                <p>Max Users: {{ league.maxNum }}</span><br>
+                <p>Max Users: {{ league.maxNum }}</span><br />
                    Starting Balance: {{ league.startbalance }}
                 </p>
                 <a ng-click="selectLeague(league)" class="secondary-content clickable"><span class="teal-text">EDIT</span></a>
@@ -91,19 +91,19 @@
 
             <form ng-if="editMode">
               <button ng-click="toggleEditMode()" class="waves-effect waves-light btn std-btn center teal"><i class="material-icons">fast_rewind</i><span class="material-icons-span">BACK</span></button>
-              <br>
-              <label>Name:</label><br>
+              <br />
+              <label>Name:</label><br />
               <input type='text' ng-model='currentLeague.name' required>
-              <br>
-              <label>Max User #: </label><br>
+              <br />
+              <label>Max User #: </label><br />
               <input type="text" ng-model='currentLeague.maxNum' required>
-              <br>
-              <label>Buying Power: </label><br>
+              <br />
+              <label>Buying Power: </label><br />
               <input type="text" ng-change="ll()" ng-model='currentLeague.startbalance' required>
-              <br>
-              <label>Start: </label><br>
+              <br />
+              <label>Start: </label><br />
               <input type="date" id="startdate" ng-model='currentLeague.start' ng-click="pickstart()" format-date>
-              <label>End Date: </label><br>
+              <label>End Date: </label><br />
               <input type="date" id="enddate" ng-model='currentLeague.end' ng-click="pickend()" format-date>
               <span>
                 <input name="isPrivate" ng-model="currentLeague.private" ng-value="false" type="radio" id="test1" />
