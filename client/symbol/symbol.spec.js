@@ -4,7 +4,7 @@ describe('symbolController', function(){
 
 	beforeEach(angular.mock.module('app.symbol'));
 
-	beforeEach(inject(function(_$controller_, _$symbolFactory_, _$httpBackend_){
+	beforeEach(inject(function(_$controller_, _$symbolFactory_){
 		SymbolController = _$controller_;
 		symbolFactory = _$symbolFactory_;
 	}));
@@ -13,6 +13,11 @@ describe('symbolController', function(){
 		expect(symbolController).toBeDefined();
 		expect(symbolFactory).toBeDefined();
 	});
+
+	it('symbolFactory methods should exist', function(){
+		expect(symbolFactory.addToWatchlist).toBeDefined();
+		expect(symbolFactory.getCompany).toBeDefined();
+	})
 
 	describe('should return a valid symbol', function(){
 		var company = 'Ford';

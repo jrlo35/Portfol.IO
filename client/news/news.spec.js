@@ -6,8 +6,8 @@ describe('NewsController', function(){
 	beforeEach(angular.mock.module('app.news'));
 
 	beforeEach(inject(function(_$controller_,_News_){
-      $controller = _$controller_;
-      NewsFactory = _News_;
+    $controller = _$controller_;
+    NewsFactory = _News_;
 	}));
 
 	NewsController = $controller('NewsController', {News: News});
@@ -16,6 +16,10 @@ describe('NewsController', function(){
 		expect(NewsController).toBeDefined();
 		expect(NewsFactory).toBeDefined();
 	})
+  
+  it('.getNews should exist', function(){
+  	expect(NewsFactory.getNews).toBeDefined();
+  })
 
 	describe('should return tweets', function() {
 		var result;

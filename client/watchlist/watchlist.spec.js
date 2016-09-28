@@ -26,16 +26,12 @@ describe('app.watchlist', function(){
 
   });
 
-  describe('should return watchlist', function(){
-  	var WatchlistController;
-
-  	beforeEach(function(){
-  		spyOn(WatchlistFactory, 'getWatchlist')
-  	})
-
-    WatchlistController = $controller('WatchlistController', {WatchlistFactory: WatchlistFactory});
-  });
-  
-
+  describe('WatchlistFactory methods should exist', function(){
+    it('methods should exist', function(){
+      expect(WatchlistFactory.getWatchlist).toBeDefined();
+      expect(WatchlistFactory.updateWatchlist).toBeDefined();
+      expect(WatchlistFactory.removeFromWatchlist).toBeDefined();
+    })
+  })
 
 })

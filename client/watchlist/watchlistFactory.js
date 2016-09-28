@@ -10,11 +10,13 @@
 
     function WatchlistFactory($http) {
 
-      return {
+      var factory = {
         getWatchlist: getWatchlist,
         updateWatchlist: updateWatchlist,
         removeFromWatchlist: removeFromWatchlist
       };
+
+      return factory;
 
       function getWatchlist(userid) {
         return $http.get('/api/watchlist/' + userid)
