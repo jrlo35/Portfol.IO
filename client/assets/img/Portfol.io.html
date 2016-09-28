@@ -62,12 +62,12 @@
       <div ng-if="showlogin" class="signup">
         <h1 class="brand-logo"> Log In </h1>
         <form name="signinForm" ng-submit='signin(user)'>
-          <label>Email </label><br>
+          <label>Email </label><br />
           <input type='text' ng-model='user.email' required>
-          <br>
-          <label>Password </label><br>
-          <input type="password" ng-model='user.password' required><br>
-          <br>
+          <br />
+          <label>Password </label><br />
+          <input type="password" ng-model='user.password' required><br />
+          <br />
           <button class="waves-effect waves-light btn std-btn">Log In</button>
         </form>
       </div>
@@ -77,15 +77,15 @@
       <div ng-if="showsignup" class="signup">
         <h1 class="brand-logo"> Sign Up </h1>
         <form name="signinForm" ng-submit='signup(user)'>
-          <label>User Name </label><br>
+          <label>User Name </label><br />
           <input type='text' ng-model='user.username' required>
-          <br>
-          <label>Email </label><br>
+          <br />
+          <label>Email </label><br />
           <input type='text' ng-model='user.email' required>
-          <br>
-          <label>Password </label><br>
-          <input type="password" ng-model='user.password' required><br>
-          <br>
+          <br />
+          <label>Password </label><br />
+          <input type="password" ng-model='user.password' required><br />
+          <br />
           <button class="waves-effect waves-light btn std-btn">Sign Up</button>
         </form>
       </div>
@@ -182,43 +182,37 @@ retained*/
   <script type="text/javascript" src="dashboard/dashboardController.js"></script>
   <script type="text/javascript" src="signin/signinController.js"></script>
   <script type="text/javascript" src="leaderboard/leaderBoardController.js"></script>
-  <script type="text/javascript" src="services/leaderBoardService.js"></script>
-  <script type="text/javascript" src="services/dashboardService.js"></script>
+  <script type="text/javascript" src="leaderboard/leaderBoardFactory.js"></script>
+  <script type="text/javascript" src="dashboard/dashboardFactory.js"></script>
   <script type="text/javascript" src="leagueResults/leagueResultsController.js"></script>
   <script type="text/javascript" src="news/newscontroller.js"></script>
   <script type="text/javascript" src="messageboard/messageBoardController.js"></script>
-  <script type="text/javascript" src="services/messageBoardService.js"></script>
-  <script type="text/javascript" src="services/authService.js"></script>
+  <script type="text/javascript" src="messageboard/messageBoardFactory.js"></script>
+  <script type="text/javascript" src="signin/authFactory.js"></script>
   <script type="text/javascript" src="botBar/botBarController.js"></script>
   <script type="text/javascript" src="preleague/preleagueController.js"></script>
-  <script type="text/javascript" src="services/preLeagueService.js"></script>
+  <script type="text/javascript" src="preleague/preleagueFactory.js"></script>
   <script type="text/javascript" src="account/accountController.js"></script>
-  <script type="text/javascript" src="services/accountService.js"></script>
-  <script type="text/javascript" src="services/portfolioService.js"></script>
+  <script type="text/javascript" src="account/accountFactory.js"></script>
+  <script type="text/javascript" src="portfolio/portfolioFactory.js"></script>
   <script type="text/javascript" src="recentTransactions/recentTransactionsController.js"></script>
   <script type="text/javascript" src="profile/ProfileController.js"></script>
   <script type="text/javascript" src="clock/clockController.js"></script>
   <script type="text/javascript" src="symbol/symbolController.js"></script>
-  <script type="text/javascript" src="services/symbolService.js"></script>
+  <script type="text/javascript" src="symbol/symbolFactory.js"></script>
   <script type="text/javascript" src="forum/mainController.js"></script>
-  <script type="text/javascript" src="services/forumService.js"></script>
+  <script type="text/javascript" src="forum/forumFactory.js"></script>
   <script type="text/javascript" src="topic/topicController.js"></script>
-  <script type="text/javascript" src="services/topicService.js"></script>
-  <script type="text/javascript" src="services/orderStatusService.js"></script>
+  <script type="text/javascript" src="topic/topicFactory.js"></script>
+  <script type="text/javascript" src="orderStatus/orderStatusFactory.js"></script>
   <script type="text/javascript" src="orderStatus/orderStatusController.js"></script>
   <script type="text/javascript" src="topic/topicController.js"></script>
-  <script type="text/javascript" src="services/topicService.js"></script>
+  <script type="text/javascript" src="topic/topicFactory.js"></script>
   <script type="text/javascript" src="badges/badgeController.js"></script>
-  <script type="text/javascript" src="services/badgeService.js"></script>
-
-  <script type="text/javascript" src="services/newsFactory.js"></script>
-  <script type="text/javascript" src="services/transactionFactory.js"></script>
-
+  <script type="text/javascript" src="badges/badgeFactory.js"></script>
+  <script type="text/javascript" src="news/newsFactory.js"></script>
+  <script type="text/javascript" src="/transactionFactory.js"></script>
   <script type="text/javascript" src="watchlist/watchlistController.js"></script>
-
-
-
-
   <script type="text/javascript" src="portfolioChart/portfolioChartController.js"></script>
 
 <!-- <script type="text/javascript" src="dist/app.js"></script> -->

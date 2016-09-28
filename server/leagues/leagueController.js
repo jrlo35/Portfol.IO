@@ -134,7 +134,7 @@ module.exports.getOneLeague = function (req, res) {
   .then(function (league) {
     res.send(league);
   })
-    .catch(function (err) {
+  .catch(function (err) {
     console.error('Error getting league: ', err);
     return;
   });
@@ -180,20 +180,24 @@ module.exports.getUsers = function(req, res){
   // Gets the most up to date values for the portfolios
   // And update the rankings
   getLatestPortfolioVals([leagueId]);
-  Portfolio.findAll({where: {leagueId: req.body.leagueId}})
-    .then(function(portfolios){
-    if (!portfolios) {
-      res.redirect("/#/dashboard");
-    } else {
-      var portsToSort = portfolioSorter(portfolios);
-      leagueUpdater(portsToSort, false);
+  Portfolio.findAll({
+    where: {
+      leagueId: req.body.leagueId
     }
-      res.send(portfolios);
-    })
-    .catch(function (err) {
-      console.error('Error getting portfolios: ', err);
-      return;
-    });
+  })
+  .then(function(portfolios){
+  if (!portfolios) {
+    res.redirect("/#/dashboard");
+  } else {
+    var portsToSort = portfolioSorter(portfolios);
+    leagueUpdater(portsToSort, false);
+  }
+    res.send(portfolios);
+  })
+  .catch(function (err) {
+    console.error('Error getting portfolios: ', err);
+    return;
+  });
 };
 
 module.exports.getLeagueByOwnerId = function(req, res){
@@ -204,7 +208,8 @@ module.exports.getLeagueByOwnerId = function(req, res){
     where: {
       ownerid: userId
     }
-  }).then(function(leagues){
+  })
+  .then(function(leagues){
     res.send(leagues);
   })
   .catch(function (err) {
@@ -230,7 +235,8 @@ module.exports.deleteLeagueById = function(req, res){
         where: {
           leagueId: leagueId
         }
-      }).then(function(portfolios){
+      })
+      .then(function(portfolios){
 
         // Forming query statement to remove all transactions from the database
         var query = 'DELETE FROM `Transactions` WHERE `PortfolioId` = '+portfolios[0].id+" ";
@@ -241,7 +247,8 @@ module.exports.deleteLeagueById = function(req, res){
         finalQuery = query + orConditions +';';
 
         // deleting all transactions
-        orm.query(finalQuery).then(function(transactions){
+        orm.query(finalQuery)
+        .then(function(transactions){
           console.log("Transactions from "+leagueName+" removed");
 
           //deleting all portfolios associated league

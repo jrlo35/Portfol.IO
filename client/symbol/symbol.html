@@ -13,13 +13,13 @@
                <div class="input-field">
                  <input ng-model="stockName" placeholder="type in company here" id="first_name2" type="text" class="validate" >
                  <label class="active" for="first_name2">Stock LookUp</label>
-                 <a ng-click="getStock(stockName)"class="waves-effect waves-light btn">Find Stock Symbol</a>
+                 <a ng-click="symbol.getStock(stockName)"class="waves-effect waves-light btn">Find Stock Symbol</a>
                  <table>
-                   <tr ng-repeat = 'result in results'>
+                   <tr ng-repeat = 'result in symbol.results'>
                      <td>{{result.name}}</td>
                      <td><h3>{{result.symbol}}</h3></td>
-                     <td><button class= 'btn std-btn' ng-click="populate(result.symbol)">Trade</button></td>
-                     <td><button class= 'btn std-btn' ng-click='addToWatchlist(result.symbol)'>Watch</button></td>
+                     <td><button class= 'btn std-btn' ng-click="symbol.populate(result.symbol)">Trade</button></td>
+                     <td><button class= 'btn std-btn' ng-click='symbol.addToWatchlist(result.symbol)'>Watch</button></td>
                   </tr>
                  </table>
                </div>

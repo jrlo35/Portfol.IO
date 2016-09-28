@@ -1,72 +1,84 @@
-var app = angular.module('app');
+(function(){
 
-app.controller('MainForumController', ['$scope', '$window', 'forumFactory', '$rootScope', '$location', '$anchorScroll','topicFactory', function($scope, $window, forumFactory, $rootScope, $location, $anchorScroll, topicFactory){
+  "use strict";
 
-  // these filters are to show the newest topics first
-  $scope.sortLatest = 'createdAt';
-  $scope.sortReverse = true;
+  angular
+    .module('app');
+    .controller('MainForumController', MainForumController);
 
-  $scope.topic = {};
+    MainForumController.$inject = ['$scope', '$window', 'forumFactory', '$rootScope', '$location', '$anchorScroll','topicFactory'];
+     
+    function($scope, $window, forumFactory, $rootScope, $location, $anchorScroll, topicFactory){
 
-  $scope.topic.username = $window.localStorage.getItem('com.tp.username');
-  $scope.topic.userId = $window.localStorage.getItem('com.tp.userId');
+      // these filters are to show the newest topics first
+      vm.allTopics;
 
-  $scope.allTopics;
+      vm.sortLatest = 'createdAt';
+      vm.sortReverse = true;
+      vm.topic = {};
+      vm.topic.username = $window.localStorage.getItem('com.tp.username');
+      vm.topic.userId = $window.localStorage.getItem('com.tp.userId');
+      
+      vm.createTopic = createTopic;
+      vm.goToTop = goToTop;
+      vm.oneTopic = oneTopic;
+      vm.openModal = openModal;
+      vm.showAllTopics = showAllTopics;
+      
 
-  //modal when create new forum
-  $scope.openModal = function(){
-    $('#createForumPost').openModal();
-  };
+      //modal when create new forum
+      function openModal(){
+        $('#createForumPost').openModal();
+      };
 
-  //add new topic
-  $scope.createTopic = function(topic){
-    forumFactory.addNewTopic(topic).then(function(err, res){
-      if (err) {
-        console.log(err);
-        return;
-      }
-    }).then(function(){
-      $scope.topic.title = '';
-      $scope.topic.description = '';
-      $('#createForumPost').closeModal();
-      $scope.showAllTopics();
-      $scope.goToTop();
-    });
-  };
+      //add new topic
+      function createTopic(topic){
+        forumFactory.addNewTopic(topic).then(function(err, res){
+          if (err) {
+            console.log(err);
+            return;
+          }
+        }).then(function(){
+          vm.topic.title = '';
+          vm.topic.description = '';
+          $('#createForumPost').closeModal();
+          vm.showAllTopics();
+          vm.goToTop();
+        });
+      };
 
-  //retrieve all topics in forum
-  $scope.showAllTopics = function(){
-    forumFactory.showAllTopics().then(function(data){
-      $scope.allTopics = data.data;
+      //retrieve all topics in forum
+      function showAllTopics(){
+        forumFactory.showAllTopics().then(function(data){
+          vm.allTopics = data.data;
 
-      for(var i = 0; i < $scope.allTopics.length; i++){
-        // an IIFE is required here bc of async issues
-        (function(index){
-          $scope.allTopics[index].replies = 0;
-          topicFactory.showAllReplies($scope.allTopics[index].id)
-            .then(function(replies){
-              console.log('#ofREPLIES: ', replies);
-              $scope.allTopics[index].replies = replies.data.length;
+          for(var i = 0; i < vm.allTopics.length; i++){
+            // an IIFE is required here bc of async issues
+            (function(index){
+              vm.allTopics[index].replies = 0;
+              topicFactory.showAllReplies(vm.allTopics[index].id)
+                .then(function(replies){
+                  vm.allTopics[index].replies = replies.data.length;
+                });
+            })(i);
+          }
 
-            });
-        })(i);
-      }
+        });
+      };
 
-    });
-  };
+      function oneTopic(){
+        if(vm.allTopics.length > 0){
+          return true;
+        }
+      };
 
-  $scope.oneTopic = function(){
-    if($scope.allTopics.length > 0){
-      return true;
-    }
-  };
+      //automatically go to top of the page
+      function goToTop(){
+        $location.hash('top');
+        $anchorScroll();
+      };
 
-  //automatically go to top of the page
-  $scope.goToTop = function(){
-    $location.hash('top');
-    $anchorScroll();
-  };
+      vm.showAllTopics();
 
-  $scope.showAllTopics();
-
-}]);
+    };
+})();

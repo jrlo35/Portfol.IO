@@ -1,22 +1,28 @@
-app.controller('NewsController', ['$scope', '$window', '$stateParams', 'News', function($scope, $window, $stateParams, News){
+(function(){
 
+  "use strict";
 
-  $scope.tweets = [];
+  angular
+    .module('app.news', [])
+    .controller('NewsController', NewsController);
+      
+    NewsController.$inject = ['$window', '$stateParams', 'News'];
 
-  //fetch tweets based on stocks in user portfolios
-  $scope.getTweets= function(){
+    function NewsController($window, $stateParams, News){
+      var vm = this;
+      vm.tweets;
+      vm.getTweets = getTweets;
 
-    var leagueId = $stateParams.leagueId;
-    var userId = $window.localStorage.getItem('com.tp.userId');
-    $scope.tweets = [];
-    News.getNews(userId, leagueId)
-    .then(function (res){
-      res.data.forEach(function(tweet){
-        $scope.tweets.push({text: tweet.text, user: tweet.user, time: tweet.created_at});
-      });
-
-    });
-  };
-
-  $scope.getTweets();
-}]);
+      //fetch tweets based on stocks in users portfolio
+      function getTweets(){
+        var leagueId = $stateParams.leagueId;
+        var userId = $window.localStorage.getItem('com.tp.userId');
+        vm.tweets = [];
+        News.getNews(userId, leagueId)
+        .then(function (res){
+          vm.tweets = res;
+        });
+      };
+      vm.getTweets();
+    };
+})();

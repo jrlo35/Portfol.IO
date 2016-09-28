@@ -1,196 +1,182 @@
+(function () {
+  
+  "use strict";
 
-var app = angular.module('app', ['ui.router', 'app.dashboard', 'app.portfolio', 'app.botbar', 'app.leagueResults', 'ngFileUpload', 'app.profile', 'angularCharts', 'ngSanitize']);
+  angular
+    .module('app', [
+      'ui.router',
+      'app.dashboard', 
+      'app.portfolio', 
+      'app.botbar', 
+      'app.leagueResults',
+      'app.leaderboard',
+      'app.news',
+      'app.recentTransactions',
+      'app.symbol',
+      'app.ticker',
+      'app.watchlist', 
+      'ngFileUpload', 
+      'app.profile', 
+      'angularCharts', 
+      'ngSanitize']);
+    .config(configure);
 
+    configure.$inject = ['$stateProvider', '$urlRouterProvider', '$httpProvider'];
 
-  app.config(['$stateProvider', '$urlRouterProvider', '$httpProvider', function ($stateProvider, $urlRouterProvider, $httpProvider) {
+    function configure($stateProvider, $urlRouterProvider, $httpProvider){
+      $urlRouterProvider.otherwise('/');
 
-    "use strict";
-    
-    $urlRouterProvider.otherwise('/');
+      $stateProvider
 
-    $stateProvider
+        .state('signin', {
+          url: '/',
+          authenticate: true,
+          controller: 'SigninController',
+          controllerAs: 'signin',
+          templateUrl: 'signin/signin.html'
+        })
 
-      .state('signin', {
-        url: '/',
-        authenticate: true,
-        controller: 'SigninController',
-        controllerAs: 'signin',
-        templateUrl: 'signin/signin.html'
-      })
+        .state('watchlist', {
+          url: '/watchlist',
+          authenticate: true,
+          controller: 'WatchlistController',
+          controllerAs: 'watchlist',
+          templateUrl: 'watchlist/watchlist.html'
+        })
 
-      .state('watchlist', {
-        url: '/watchlist',
-        authenticate: true,
-        controller: 'WatchlistController',
-        templateUrl: 'watchlist/watchlist.html'
-      })
-
-      .state('ticker',{
-        url:'/ticker',
-        controller: 'tickerController',
-        templateUrl:'ticker/ticker.html'
-      })
-
-      .state('dashboard', {
-        url: '/dashboard',
-        authenticate: true,
-        views: {
-          '': {
-            controller: 'DashboardController',
-            controllerAs: 'dashboard',
-            templateUrl: 'dashboard/dashboard.html'
-          }
-        }
-      })
-
-      .state('analysis', {
-        url: '/analysis',
-        controller: 'AnalysisController',
-        templateUrl: 'analysis/analysis.html'
-      })
-
-      .state('forum', {
-        url: '/forum',
-        authenticate: true,
-        controller: 'MainForumController',
-        templateUrl: 'forum/main.html'
-      })
-
-      .state('messages', {
-        url: '/messages',
-        authenticate: true,
-        controller: 'MessagesController',
-        templateUrl: 'messages/messages.html'
-      })
-
-      .state('topic', {
-        url: '/topics/:topicId',
-        authenticate: true,
-        controller: 'TopicController',
-        templateUrl: 'topic/topic.html'
-      })
-
-      .state('account', {
-        url: '/account',
-        authenticate: true,
-        controller: 'AccountController',
-        templateUrl: 'account/account.html'
-      })
-
-      .state('profiles', {
-        url: '/profiles/:userId',
-        authenticate: false,
-        views: {
-          '': {
-            controller: 'ProfileController',
-            templateUrl: 'profile/profile.html'
-          },
-          'badges@profiles': {
-            controller: 'BadgeController',
-            controllerAs: 'badge',
-            templateUrl: 'badges/badge.html'
-          }
-        }
-      })
-
-      .state('league', {
-        url: '/leagues/:leagueId',
-        authenticate: true,
-        views: {
-          /*main view of the entire league template*/
-          '': {
-            templateUrl: 'league/league.html',
-            controller: 'LeagueController'
-          },
-
-          'order@league': {
-            controller: 'orderStatusController',
-            templateUrl: 'orderStatus/orderStatus.html'
-          },
-          // portfolio view within the league page
-          'portfolio@league': {
-            controller: 'PortfolioController',
-            controllerAs: 'portfolio',
-            templateUrl: 'portfolio/portfolio.html'
-          },
-          // leaderboard view within league page
-          'leaderboard@league': {
-            controller: 'LeaderBoardController',
-            controllerAs: 'leaderboard',
-            templateUrl: 'leaderboard/leaderboard.html'
-          },
-          // news/analysis view within league page
-
-          'news@league': {
-            controller: 'NewsController',
-            templateUrl: 'news/news.html'
-          },
-          // recent transactions view within league page
-          'recentTransactions@league': {
-            controller: 'recentTransactionsController',
-            templateUrl: 'recentTransactions/recentTransactions.html'
-          },
-          // message board view within league page
-          'messageboard@league': {
-            controller: 'MessageBoardController',
-            templateUrl: 'messageboard/messageboard.html'
-          },
-          // league results view within league page
-          'leagueResults@league': {
-            controller: 'LeagueResultsController',
-            templateUrl: 'leagueResults/leagueResults.html'
-          },
-          // before league starts view within league page
-          'preleague@league': {
-            controller: 'PreLeagueController',
-            templateUrl: 'preleague/preleague.html'
-          },
-          // symbol lookup modal view
-          'symbol@league':{
-            controller: 'SymbolController',
-            templateUrl: 'symbol/symbol.html'
-          }
-        }
-      });
-
-    $httpProvider.interceptors.push('AttachTokens');
-
-  }]);
-
-app.factory('AttachTokens', function ($window) {
-    // this is an $httpInterceptor
-    // its job is to stop all out going request
-    // then look in local storage and find the user's token
-    // then add it to the header so the server can validate the request
-    "use strict";
-
-    var attach = {
-      request: function (object) {
-
-        var jwt = $window.localStorage.getItem('com.tp');
-            if (jwt) {
-                object.headers['x-access-token'] = jwt;
+        .state('dashboard', {
+          url: '/dashboard',
+          authenticate: true,
+          views: {
+            '': {
+              controller: 'DashboardController',
+              controllerAs: 'dashboard',
+              templateUrl: 'dashboard/dashboard.html'
             }
-            object.headers['Allow-Control-Allow-Origin'] = '*';
-            return object;
-        }
+          }
+        })
+
+        .state('analysis', {
+          url: '/analysis',
+          controller: 'AnalysisController',
+          controllerAs: 'analysis',
+          templateUrl: 'analysis/analysis.html'
+        })
+
+        .state('forum', {
+          url: '/forum',
+          authenticate: true,
+          controller: 'MainForumController',
+          controllerAs: 'forum',
+          templateUrl: 'forum/main.html'
+        })
+
+        .state('messages', {
+          url: '/messages',
+          authenticate: true,
+          controller: 'MessagesController',
+          controllerAs: 'message',
+          templateUrl: 'messages/messages.html'
+        })
+
+        .state('topic', {
+          url: '/topics/:topicId',
+          authenticate: true,
+          controller: 'TopicController',
+          controllerAs: 'topic',
+          templateUrl: 'topic/topic.html'
+        })
+
+        .state('account', {
+          url: '/account',
+          authenticate: true,
+          controller: 'AccountController',
+          controllerAs: 'controller',
+          templateUrl: 'account/account.html'
+        })
+
+        .state('profiles', {
+          url: '/profiles/:userId',
+          authenticate: false,
+          views: {
+            '': {
+              controller: 'ProfileController',
+              controllerAs: 'profile',
+              templateUrl: 'profile/profile.html'
+            },
+            'badges@profiles': {
+              controller: 'BadgeController',
+              controllerAs: 'badge',
+              templateUrl: 'badges/badge.html'
+            }
+          }
+        })
+
+        .state('league', {
+          url: '/leagues/:leagueId',
+          authenticate: true,
+          views: {
+            /*main view of the entire league template*/
+            '': {
+              templateUrl: 'league/league.html',
+              controller: 'LeagueController',
+              controllerAs: 'league'
+            },
+            //child views 
+            'order@league': {
+              controller: 'orderStatusController',
+              controllerAs: 'orderStatus',
+              templateUrl: 'orderStatus/orderStatus.html'
+            },
+            // portfolio view within the league page
+            'portfolio@league': {
+              controller: 'PortfolioController',
+              controllerAs: 'portfolio',
+              templateUrl: 'portfolio/portfolio.html'
+            },
+            // leaderboard view within league page
+            'leaderboard@league': {
+              controller: 'LeaderBoardController',
+              controllerAs: 'leaderboard',
+              templateUrl: 'leaderboard/leaderboard.html'
+            },
+            // news/analysis view within league page
+            'news@league': {
+              controller: 'NewsController',
+              controllerAs: 'news',
+              templateUrl: 'news/news.html'
+            },
+            // recent transactions view within league page
+            'recentTransactions@league': {
+              controller: 'recentTransactionsController',
+              controllerAs: 'recent',
+              templateUrl: 'recentTransactions/recentTransactions.html'
+            },
+            // message board view within league page
+            'messageboard@league': {
+              controller: 'MessageBoardController',
+              controllerAs: 'messageboard',
+              templateUrl: 'messageboard/messageboard.html'
+            },
+            // league results view within league page
+            'leagueResults@league': {
+              controller: 'LeagueResultsController',
+              controllerAs: 'results',
+              templateUrl: 'leagueResults/leagueResults.html'
+            },
+            // before league starts view within league page
+            'preleague@league': {
+              controller: 'PreLeagueController',
+              controllerAs: 'preleague',
+              templateUrl: 'preleague/preleague.html'
+            },
+            // symbol lookup modal view
+            'symbol@league':{
+              controller: 'SymbolController',
+              controllerAs: 'symbol',
+              templateUrl: 'symbol/symbol.html'
+            }
+          }
+        });
     };
-    return attach;
-})
-.run(function ($rootScope, $location, Auth) {
-// here inside the run phase of angular, our services and controllers
-// have just been registered and our app is ready
-// however, we want to make sure the user is authorized
-// we listen for when angular is trying to change routes
-// when it does change routes, we then look for the token in localstorage
-// and send that token to the server to see if it is a real user or hasn't expired
-// if it's not valid, we then redirect back to signin/signup
-    "use strict";
-    
-    $rootScope.$on('$stateChangeStart', function (evt, next, current) {
-  // if (next.$$state && next.$$state.authenticate && !Auth.isAuth()) {
-        if (!Auth.isAuth()) {
-            $location.path('/');
-        }
-    });
-});
+})()

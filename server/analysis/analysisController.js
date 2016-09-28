@@ -2,7 +2,6 @@
 var fs = require('fs');
 var http = require('http-request');
 
-
 //gather stock data for dates
 module.exports.stockdata = function (req, res) {
 
@@ -26,7 +25,6 @@ module.exports.stockdata = function (req, res) {
             res.send('Error retrieving data');
         }
     });
-
 };
 
 //stock lookup with yahoo query

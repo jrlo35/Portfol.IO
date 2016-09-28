@@ -8,14 +8,19 @@ var _ = require('underscore');
 module.exports.getUserStocks = function (req, res) {
 
   "use strict";
-  Portfolio.findOne({ where: {
-    UserId: req.params.userId,
-    leagueId: req.params.leagueId
-  }}).then(function (portfolio) {
 
-    Transaction.findAll({ where: {
+  Portfolio.findOne({
+    where: {
+      UserId: req.params.userId,
+      leagueId: req.params.leagueId
+    }
+  })
+  .then(function (portfolio) {
+    Transaction.findAll({
+      where: {
       PortfolioId: portfolio.id
-    }}).then(function (transactions) {
+      }
+    }).then(function (transactions) {
 
       // minimizes doubles, adds all shares from same company
       var updatedShares = reduceStocks(transactions);
@@ -24,14 +29,11 @@ module.exports.getUserStocks = function (req, res) {
       var reducedStocks = _.filter(updatedShares, function (transaction) {
         return transaction.buysell && transaction.shares > 0;
       });
-
       res.send(reducedStocks);
-
     })
     .catch(function (err) {
       res.send("There was an error: ", err);
     });
-
   })
   .catch(function (err) {
     res.send("There was an error: ", err);
@@ -43,24 +45,31 @@ module.exports.getUserStocks = function (req, res) {
 module.exports.updateUserStocks = function (req, res) {
 
   "use strict";
-  Portfolio.findOne({ where: {
-    UserId: req.params.userId,
-    leagueId: req.params.leagueId
-  }}).then(function (portfolio) {
 
-    Transaction.findAll({ where: {
-      PortfolioId: portfolio.id
-    }}).then(function (transactions) {
-
-      if (transactions.length < 1){ res.send({error:null}); return;}
-
+  Portfolio.findOne({
+    where: {
+      UserId: req.params.userId,
+      leagueId: req.params.leagueId
+    }
+  })
+  .then(function (portfolio) {
+    Transaction.findAll({
+      where: {
+        PortfolioId: portfolio.id
+      }
+    })
+    .then(function (transactions) {
+      if (transactions.length < 1){
+        res.send({error:null});
+        return;
+      }
       var portfolioValue = 0;
 
       // minimizes doubles, adds all shares from same company
       var updatedShares = reduceStocks(transactions);
 
       // returns only the bought shares
-      var reducedStocks = _.filter(updatedShares, function(transaction){
+      var reducedStocks = _.filter(updatedShares, function (transaction) {
         return transaction.buysell && transaction.shares > 0;
       });
 
@@ -80,7 +89,10 @@ module.exports.updateUserStocks = function (req, res) {
         stocks.body = JSON.parse(stocks.body);
 
         // Too many queries instantaneously cause API to fail, sends error emit to client
-        if (!stocks.body.query){ res.send({error:true}); return 0; }
+        if (!stocks.body.query) {
+          res.send({error:true});
+          return 0;
+        }
 
         // if only one stock is being updated
         if (stocks.body.query.count === 1){

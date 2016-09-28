@@ -1,68 +1,69 @@
-var app = angular.module('app')
 
-//reverse transactions so newest go first
-.filter('reverse', function() {
-  return function(items) {
-    return items.slice().reverse();
-  };
-})
+(function(){
+  
+  "use strict";
 
-//absolute all negative to positive, for # shares bougth/sold
-.filter('negative', function () {
-   return function (items) {
-    if(items <1){
-      return Math.abs(items);
-    }
-    else{
-      return Math.abs(items);
-    }
-  };
-})
+  angular
+    .module('app.recentTransactions', [])
+    .controller('recentTransactionsController', recentTransactionsController);
 
-.controller('recentTransactionsController', ['$scope', 'transactionFactory', '$stateParams', 'leaderBoardFactory', '$rootScope', function ($scope, transactionFactory, $stateParams, leaderBoardFactory, $rootScope) {
+    recentTransactionsController.$inject = ['transactionFactory', '$stateParams', 'leaderBoardFactory', '$rootScope'];
 
-  var leagueId = $stateParams.leagueId;
+    function recentTransactionsController(transactionFactory, $stateParams, leaderBoardFactory, $rootScope) {
 
-  $scope.portfolios =[];
-  $scope.transactions = [];
-  $scope.usernames = {};
+      var leagueId = $stateParams.leagueId;
 
-  //fetch all transaction in league by leagueid
-  $scope.getleagueTransactions = function (arr) {
-    	  $scope.transactions =[];
+      vm.portfolios =[];
+      vm.transactions;
+      vm.getleagueTransactions = getleagueTransactions;
+      vm.getPortfolios = getPortfolios;
+
+      //fetch all transactions in league by leagueid
+      function getleagueTransactions(arr) {
+    	  vm.transactions;
         transactionFactory.getleagueTransactions(arr)
         .then(function (transactions){
-
-        		angular.forEach(transactions.data, function (transaction){
-
-        			for(var k in $scope.usernames){
-        				if(parseInt(k) === transaction.portfolioid){
-        					transaction.portfolioid = $scope.usernames[k];
-        				}
-        			}
-        			$scope.transactions.push(transaction);
-        		});
+          vm.transactions = transactions;
         });
-  };
+      }; 
 
-  //to receive latest transactions;
-  $scope.getPortfolios = function () {
-  	leaderBoardFactory.getPortfolios(leagueId)
-  	  .then(function (portfolios) {
-  	  	portfolios.forEach(function (portfolio) {
-  	  		var id = portfolio.id;
-  	  		$scope.usernames[portfolio.id]= portfolio.username;
-  	  		$scope.portfolios.push({'PortfolioId': portfolio.id});
-  	  	});
-        $scope.getleagueTransactions($scope.portfolios);
-  	  });
-  };
+      //to receive league ids;
+      function getPortfolios() {
+      	leaderBoardFactory.getPortfolios(leagueId)
+      	  .then(function (portfolios) {
+      	  	portfolios.forEach(function (portfolio) {
+      	  		vm.portfolios.push({'PortfolioId': portfolio.id});
+      	  	});
 
-  $rootScope.$on('recentTrxn', function(){
+            //send array of objects to query using $OR
+            vm.getleagueTransactions(vm.portfolios);
+      	  });
+      };
+      $rootScope.$on('recentTrxn', function(){
 
-    $scope.getPortfolios();
-  });
+        vm.getPortfolios();
+      });
 
-  $scope.getPortfolios();
+      vm.getPortfolios();
+    }
 
-}]);
+
+    //reverse transactions so newest go first
+    .filter('reverse', function() {
+      return function(items) {
+        return items.slice().reverse();
+      };
+    })
+
+    //absolute all negative to positive, for # shares bougth/sold
+    .filter('negative', function () {
+       return function (items) {
+        if(items <1){
+          return Math.abs(items);
+        }
+        else{
+          return Math.abs(items);
+        }
+      };
+    })
+})();

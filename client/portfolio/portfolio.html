@@ -5,7 +5,7 @@
 	      <a class="brand-logo" style="font-size: 20px">My Portfolio</a>
 	      <ul class="right hide-on-med-and-down">
 
-	        <li>Portfolio Value: {{ portfolioValue | currency }}   |   Balance: {{ balance | currency }}</li>
+	        <li>Portfolio Value: {{ portfolio.portfolioValue | currency }}   |   Balance: {{ portfolio.balance | currency }}</li>
 	        <li><a ng-click="updateMarketPrice()"><i class="material-icons">refresh</i></a></li>
 
 	      </ul>
@@ -25,7 +25,7 @@
 					</tr>
 				</thead>
 				<tbody>
-		      <tr ng-repeat="stock in stocks">
+		      <tr ng-repeat="stock in portfolio.stocks">
 		        <td><span class="company-symbol">{{stock.symbol}}</span>
 		        <span class="company-name">{{stock.company}}</span></td>
 		        <td>{{stock.shares}}</td>
@@ -33,7 +33,7 @@
 		        <td>{{stock.marketPrice | currency}}</td>
 		        <td>{{stock.return | number:3}}%</td>
 		        <td>{{twoDecimal(stock.percentage)}}%</td>
-		        <td><a ng-click="sellStock(stock)"class="btn-floating red sell-button"><i class="material-icons">supervisor_account</i></a></td>
+		        <td><a ng-click="portfolio.sellStock(stock)"class="btn-floating red sell-button"><i class="material-icons">supervisor_account</i></a></td>
 		      </tr>
 		    </tbody>
 			</table>
@@ -57,35 +57,35 @@
 			<div class="row portfolio-search">
 				<article class="col s6">
 					<p class="action-title">ENTER STOCK TICKER SYMBOL</p>
-					<input ng-model="stockInput" class="col s8" type="text" required>
-					<a ng-click="chooseStock(stockInput)" class="waves-effect waves-light btn std-btn col s4"><i class="material-icons">search</i></a>
+					<input ng-model="portfolio.stockInput" class="col s8" type="text" required>
+					<a ng-click="portfolio.chooseStock(stockInput)" class="waves-effect waves-light btn std-btn col s4"><i class="material-icons">search</i></a>
 
 					<section class="stock-data">
 						<section class="col s6">
-							<p class="sym">{{stock.symbol}}</p>
-							<p class="comp">{{stock.Name}}</p>
+							<p class="sym">{{portfolio.stock.symbol}}</p>
+							<p class="comp">{{portfolio.stock.Name}}</p>
 						</section>
-						<section ng-if="stock" class="col s6">
-							<p class="price">Ask: {{stock.Ask | currency}}</p>
-							<p class="perc">Change: {{stock.Change}}</p>
-							<p class="perc">% Change: {{stock.PercentChange}}</p>
+						<section ng-if="portfolio.stock" class="col s6">
+							<p class="price">Ask: {{portfolio.stock.Ask | currency}}</p>
+							<p class="perc">Change: {{portfolio.stock.Change}}</p>
+							<p class="perc">% Change: {{portfolio.stock.PercentChange}}</p>
 						</section>
 					</section>
-					<section class='col s12' ng-if='stock'>
-						<br>
-					<section stock-datang-if="stock" class="col s6">
+					<section class='col s12' ng-if='portfolio.stock'>
+						<br />
+					<section stock-datang-if="portfolio.stock" class="col s6">
 
-							<p class="perc">Close:   {{stock.close}}</p>
-							<p class="perc">Open:    {{stock.open}}</p>
-							<p class="perc">Target:  {{stock.yrTarget}}</p>
-							<p class="perc">Volume:  {{stock.vol}}</p>
+							<p class="perc">Close:   {{portfolio.stock.close}}</p>
+							<p class="perc">Open:    {{portfolio.stock.open}}</p>
+							<p class="perc">Target:  {{portfolio.stock.yrTarget}}</p>
+							<p class="perc">Volume:  {{portfolio.stock.vol}}</p>
 						</section>
 
-						<section ng-if="stock" class="col s6">
-							<p class="perc">AvgDailyVol:  {{stock.avgVol}}</p>
-							<p class="perc">MarktCap: {{stock.mrktCap}}</p>
-							<p class="perc">Yield:   {{stock.yield}}</p>
-							<p class="perc">P/E:     {{stock.pe}}</p>
+						<section ng-if="portfolio.stock" class="col s6">
+							<p class="perc">AvgDailyVol:  {{portfolio.stock.avgVol}}</p>
+							<p class="perc">MarktCap: {{portfolio.stock.mrktCap}}</p>
+							<p class="perc">Yield:   {{portfolio.stock.yield}}</p>
+							<p class="perc">P/E:     {{portfolio.stock.pe}}</p>
 						</section>
 
 					</section>
@@ -108,56 +108,56 @@
 					<div class="switch action-toggle">
 				    <label class="col s4 center">
 				      BUY
-				      <input type="checkbox" class="test" ng-model="action">
+				      <input type="checkbox" class="test" ng-model="portfolio.action">
 				      <span class="lever"></span>
 				      SELL
 				    </label>
 				    <label class="col s4 center">
 				      Market Order
-				      <input type="checkbox" ng-click="ordtype()" ng-model="ordertype">
+				      <input type="checkbox" ng-click="ordtype()" ng-model="portfolio.ordertype">
 				      <span class="lever"></span>
 				      Limit Order
 				    </label>
 				    <label class="col s4 center">
 				      Day
-				      <input type="checkbox" class="test" ng-model="duration">
+				      <input type="checkbox" class="test" ng-model="portfolio.duration">
 				      <span class="lever"></span>
 				      GTC
 				    </label>
 				  </div>
-				  <br>
+				  <br />
 				  <div class="divider"></div>
 
 				  <div class="row stock-calculator">
 					  <section class="col s3">
 					  	<span>NUMBER OF STOCKS: </span>
 						  <div class="chip">
-						    <input class="stockAmount" ng-change="updateAmounts()" ng-model="stockAmount" required>
+						    <input class="stockAmount" ng-change="portfolio.updateAmounts()" ng-model="portfolio.stockAmount" required>
 						  </div>
 					  </section>
 				    <section class="col s3">
 				    	<span><b>x</b> Price </span>
 				  	  <div class="chip">
-				  	    <input class="stockAmount" ng-disabled="!ordertype" ng-change="updateAmounts()" ng-model="singlePrice" required>
+				  	    <input class="stockAmount" ng-disabled="!ordertype" ng-change="portfolio.updateAmounts()" ng-model="portfolio.singlePrice" required>
 				  	  </div>
 				    </section>
 					  <section class="col s3">
 					  	<span><b>=</b> Est. Price </span>
 						  <div class="chip">
-						    {{estPrice | currency}}
+						    {{portfolio.estPrice | currency}}
 						  </div>
 					  </section>
 					  <section class="col s3">
 					  	<span><b>+</b> FEES </span>
 						  <div class="chip">
-						    {{ fees | currency}}
+						    {{ portfolio.fees | currency}}
 						  </div>
 					  </section>
 					 </div>
 
 				  <div class="divider"></div>
 				  <article>
-						<a ng-click='performAction()' class="waves-effect waves-light btn center trade-button std-btn">TRADE FOR A TOTAL OF <span class="larger">{{ total || 0 | currency}}</span></a>
+						<a ng-click='portfolio.performAction()' class="waves-effect waves-light btn center trade-button std-btn">TRADE FOR A TOTAL OF <span class="larger">{{ portfolio.total || 0 | currency}}</span></a>
 				  </article>
 
 				</article>

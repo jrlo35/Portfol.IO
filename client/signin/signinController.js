@@ -2,7 +2,7 @@
 
 angular
   .module('app')
-  .controller('SigninController', SigninController)
+  .controller('SigninController', SigninController);
 
 SigninController.$inject = ['$scope', '$window', 'Auth', 'DirectMessage', '$rootScope', 'DashboardFactory', 'LeagueInvite'];
 
@@ -24,24 +24,24 @@ function SigninController ($scope, $window, Auth, DirectMessage, $rootScope, Das
   vm.username;
   //toggle signup modal directive
   vm.showsignup = false;
-  function toggleSignup() {
+  function toggleSignup () {
     vm.showsignup = !vm.showsignup;
   };
 
   vm.showlogin = false;
-  function toggleLogin() {
+  function toggleLogin () {
     vm.showlogin = !vm.showlogin;
   };
 
   vm.showforgot = false;
-  function toggleForgot() {
+  function toggleForgot () {
     vm.showforgot = !vm.showforgot;
     vm.emailsent = false;
   };
 
   
     //new user signup
-  function signup(user) {
+  function signup (user) {
     Auth.createuser(user)
       .then(function(data) {
         if(data === 'Email already in use'){
@@ -67,7 +67,7 @@ function SigninController ($scope, $window, Auth, DirectMessage, $rootScope, Das
   
 
 
-  function authorize(){
+  function authorize (){
     if(Auth.isAuth()){
       $scope.loggedin = true;
       $scope.username = $window.localStorage.getItem('com.tp.username');
@@ -82,17 +82,13 @@ function SigninController ($scope, $window, Auth, DirectMessage, $rootScope, Das
     $scope.loggedin = false;
   });
 
-  
-
-
-
-  function forgot(){
+  function forgot (){
     $scope.toggleLogin();
     $scope.toggleForgot();
   };
 
   $scope.emailsent = false;
-  function forgotpassword(email){
+  function forgotpassword (email){
     if(email) $window.localStorage.setItem('email', email);
     if(!email) email = $window.localStorage.getItem('email');
     Auth.forgotpw(email)
@@ -106,7 +102,7 @@ function SigninController ($scope, $window, Auth, DirectMessage, $rootScope, Das
   };
 
   //clear out input fields
-  function clearsignup(){
+  function clearsignup (){
     $scope.user.username = '';
     $scope.user.password = '';
     $scope.user.email = '';
@@ -115,7 +111,7 @@ function SigninController ($scope, $window, Auth, DirectMessage, $rootScope, Das
   
 
   //user login
-  function signin(user){
+  function signin (user){
     Auth.loginuser(user).then(function(data){
       if(data === 'User not found'){
         Materialize.toast('No user found.', 2000);
@@ -140,7 +136,7 @@ function SigninController ($scope, $window, Auth, DirectMessage, $rootScope, Das
   };
 
   //remove everything from localstorage
-  function logout(user){
+  function logout (user){
     $scope.loggedin = false;
     $window.localStorage.removeItem('com.tp');
     $window.localStorage.removeItem('com.tp.userId');
@@ -149,7 +145,7 @@ function SigninController ($scope, $window, Auth, DirectMessage, $rootScope, Das
   };
 
   //get all user's leagues
-  function getUserLeagues() {
+  function getUserLeagues () {
     var userId = $window.localStorage.getItem('com.tp.userId');
     DashboardFactory.getUserLeagues(userId)
       .then(function(userLeagues){
@@ -158,7 +154,7 @@ function SigninController ($scope, $window, Auth, DirectMessage, $rootScope, Das
   };
 
 
-  $window.onload = function(e) {
+  $window.onload = function (e) {
     $scope.getUserLeagues();
   };
 
@@ -171,7 +167,7 @@ function SigninController ($scope, $window, Auth, DirectMessage, $rootScope, Das
   });
 
   // Handle's Messages Notifications
-  function getOpenAndUnreadMessages(){
+  function getOpenAndUnreadMessages (){
     counter = 0;
     DirectMessage.getOpenAndUnreadMessages($scope.id).then(function(data){
       //if current user was last person to send message, set message thread status to be read
@@ -194,7 +190,7 @@ function SigninController ($scope, $window, Auth, DirectMessage, $rootScope, Das
     });
   }
 
-  function getInvitesByUserId(){
+  function getInvitesByUserId () {
     LeagueInvite.getInvitesByUserId($scope.id).then(function(data){
       $scope.invites = data;
 
@@ -209,7 +205,7 @@ function SigninController ($scope, $window, Auth, DirectMessage, $rootScope, Das
     });
   }
 
-  function updateMessageCenter(){
+  function updateMessageCenter () {
     getOpenAndUnreadMessages();
     getInvitesByUserId();
   }
@@ -218,7 +214,7 @@ function SigninController ($scope, $window, Auth, DirectMessage, $rootScope, Das
     setInterval(updateMessageCenter, 3000);
   }
 
-  function notdone(league){
+  function notdone (league) {
     return !league.leagueEnded;
   };
 

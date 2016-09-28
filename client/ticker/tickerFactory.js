@@ -3,90 +3,82 @@
   "use strict";
 
   angular
-    .module('app');
-		.factory('TickerFactory', TickerFactory);
+    .module('app.ticker')
+    .factory('TickerFactory', TickerFactory);
     
-  TickerFactory.$inject = ['$http'];
+    TickerFactory.$inject = ['$http'];
 
-  function TickerFactory ($http) {
+	  function TickerFactory ($http) {
+	  	var factory = {
+	  		displayTicker: displayTicker,
+		  	getAllUserStocks: getAllUserStocks,
+		  	getAllPortfolioId: getAllPortfolioId,
+		  	stocksQuery: stocksQuery
+		  };
+		  return factory;
 
-  	return {
-	  	getAllUserStocks: getAllUserStocks,
-	  	getAllPortfolioId: getAllPortfolioId,
-	  	stocksQuery: stocksQuery
-	  };
+		  function displayTicker (finalStocks) {
+	      return finalStocks.slice();
+		  }
 
-		function getAllPortfolioId(userID) {
-      return $http.post('/api/ticker/', {id: userID})
-        .then(getAllPortfolioIdComplete)
-        .catch(getAllPortfolioIdFailed)
+		  function getAllPortfolioId (userId) {
+	      return $http.post('/api/ticker/', {id: userId})
+	        .then(getAllPortfolioIdComplete)
+	        .catch(getAllPortfolioIdFailed);
 
-      function getAllPortfolioIdComplete(data) {
-        var usersPortfolios = data.data;
-        return usersPortfolios;
-      }
-      
-      function getAllPortfolioIdFailed(err) {
-      	console.error(err);
-      }
-	  }
+	      function getAllPortfolioIdComplete (data) {
+	        var usersPortfolios = data.data;
+	        return usersPortfolios;
+	      }
+	      
+	      function getAllPortfolioIdFailed (err) {
+	      	console.error(err);
+	      }
+		  }
 
-	  function getAllUserStocks(data) {
-	  	return $http.post('/api/ticker/stocks', {ids: data})
-	  	  .then(getAllUserStocksComplete)
-	  	  .catch(getAllUserStocksFailed)
+		  function getAllUserStocks (data) {
+		  	return $http.post('/api/ticker/stocks', {ids: data})
+		  	  .then(getAllUserStocksComplete)
+		  	  .catch(getAllUserStocksFailed)
 
-	  	function getAllUserStocksComplete(stocks) {
-	  		var userStocks = [];
-	  		var allUserStocks = stocks.data;
-        allUserStocks.forEach(function (stock) {
-          userStocks.push(stock.toUpperCase());
-	  	  })
-	  	  return userStocks;
-	  	}
+		  	function getAllUserStocksComplete (stocks) {
+	        return stocks.data.map(function (stock) {
+	        	return stock.toUpperCase();
+	        });
+		  	}
 
-	  	function getAllUserStocksFailed(err){
-        console.error(err);
-	  	}
-	  }
+		  	function getAllUserStocksFailed (err){
+	        console.error(err);
+		  	}
+		  }
+	 
+		  function stocksQuery (data) {
+		  	return $http.post('/api/ticker/stockquote', {stocks: data})
+		  	  .then(stocksQueryComplete)
+		  	  .catch(stocksQueryFailed)
 
-	  function stocksQuery(data) {
-	  	return $http.post('/api/ticker/stockquote', {stocks: data})
-	  	  .then(stocksQueryComplete)
-	  	  .catch(stocksQueryFailed)
+		  	function stocksQueryComplete (allStockInfo) {
+	        allStockInfo.data.pop();
+			  	return allStockInfo.data.map(function (stock) {
+			  		return stock.map(function (result) {
 
-	  	function stocksQueryComplete(allStockInfo) {
-	  		var finalStocks = [];
-	  		var parsedStocks = [];
-        allStockInfo.data.pop();
-        allStockInfo.data.forEach(function (stock) {
-
-          stock.forEach(function (result) {
-
-            var parsedResult = result.replace(/\"/g,'');
-            if(/[\%]/.test(parsedResult)) {
-
-              var res = parsedResult.replace(/\%/,'');
-              var sign = res[0];
-              var decimal = res.substr(1);
-              var round = parseFloat(decimal).toFixed(2);
-              var final = sign + round.toString();
-              parsedResult = final.concat('%');
-            }
-            parsedStocks.push(parsedResult);
-       	  })
-
-          finalstocks.push(parsedStocks)
-          parsedStocks = [];
-        })
-        return finalStocks;
-	  	}
-
-	  	function stocksQueryFailed(err) {
-        console.error(err);
-	  	}
-	  		
-	  }
-	  
-	});
-}()
+			  			//round percent to two decimal places
+			  			var parsedResult = result.replace(/\"/g,'');
+		          if(/[\%]/.test(parsedResult)) {
+		            var res = parsedResult.replace(/\%/,'');
+		            var sign = res[0];
+		            var decimal = res.substr(1);
+		            var round = parseFloat(decimal).toFixed(2);
+		            var final = sign + round.toString();
+		            parsedResult = final.concat('%');
+		          }
+		          return parsedResult;
+			  		});
+			  	});
+			  }
+		  	function stocksQueryFailed (err) {
+	        console.error(err);
+		  	}
+		  }
+		};
+})();
