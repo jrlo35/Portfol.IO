@@ -40,6 +40,7 @@
           url: '/watchlist',
           authenticate: true,
           controller: 'WatchlistController',
+          controllerAs: 'watchlist',
           templateUrl: 'watchlist/watchlist.html'
         })
 
@@ -58,6 +59,7 @@
         .state('analysis', {
           url: '/analysis',
           controller: 'AnalysisController',
+          controllerAs: 'analysis',
           templateUrl: 'analysis/analysis.html'
         })
 
@@ -65,6 +67,7 @@
           url: '/forum',
           authenticate: true,
           controller: 'MainForumController',
+          controllerAs: 'forum',
           templateUrl: 'forum/main.html'
         })
 
@@ -72,6 +75,7 @@
           url: '/messages',
           authenticate: true,
           controller: 'MessagesController',
+          controllerAs: 'message',
           templateUrl: 'messages/messages.html'
         })
 
@@ -79,6 +83,7 @@
           url: '/topics/:topicId',
           authenticate: true,
           controller: 'TopicController',
+          controllerAs: 'topic',
           templateUrl: 'topic/topic.html'
         })
 
@@ -96,6 +101,7 @@
           views: {
             '': {
               controller: 'ProfileController',
+              controllerAs: 'profile',
               templateUrl: 'profile/profile.html'
             },
             'badges@profiles': {
@@ -113,11 +119,13 @@
             /*main view of the entire league template*/
             '': {
               templateUrl: 'league/league.html',
-              controller: 'LeagueController'
+              controller: 'LeagueController',
+              controllerAs: 'league'
             },
             //child views 
             'order@league': {
               controller: 'orderStatusController',
+              controllerAs: 'orderStatus',
               templateUrl: 'orderStatus/orderStatus.html'
             },
             // portfolio view within the league page

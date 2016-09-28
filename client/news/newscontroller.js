@@ -9,14 +9,12 @@
     NewsController.$inject = ['$window', '$stateParams', 'News'];
 
     function NewsController($window, $stateParams, News){
-      
       var vm = this;
       vm.tweets;
       vm.getTweets = getTweets;
 
       //fetch tweets based on stocks in users portfolio
       function getTweets(){
-
         var leagueId = $stateParams.leagueId;
         var userId = $window.localStorage.getItem('com.tp.userId');
         vm.tweets = [];
@@ -27,5 +25,4 @@
       };
       vm.getTweets();
     };
-
 })();

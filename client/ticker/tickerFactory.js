@@ -21,7 +21,7 @@
 	      return finalStocks.slice();
 		  }
 
-			function getAllPortfolioId (userId) {
+		  function getAllPortfolioId (userId) {
 	      return $http.post('/api/ticker/', {id: userId})
 	        .then(getAllPortfolioIdComplete)
 	        .catch(getAllPortfolioIdFailed);
@@ -61,6 +61,8 @@
 	        allStockInfo.data.pop();
 			  	return allStockInfo.data.map(function (stock) {
 			  		return stock.map(function (result) {
+
+			  			//round percent to two decimal places
 			  			var parsedResult = result.replace(/\"/g,'');
 		          if(/[\%]/.test(parsedResult)) {
 		            var res = parsedResult.replace(/\%/,'');
