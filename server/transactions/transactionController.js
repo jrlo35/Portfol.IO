@@ -94,29 +94,29 @@ module.exports.getOrders = function (req, res) {
       leagueId: req.body.leagueId
     }
   })
-    .then(function (portfolio) {
+  .then(function (portfolio) {
 
-      Order.findAll({where: {portfolioId: portfolio.id
-        }
-      })
-      .then(function (orders) {
+    Order.findAll({where: {portfolioId: portfolio.id
+      }
+    })
+    .then(function (orders) {
 
-        if (!orders) {
-          res.send('No orders found!');
-        }
-        else {
-                res.send(orders);
-        }
-      })
-      .catch(function (err) {
-
-        res.send('Error: ', err);
-      });
+      if (!orders) {
+        res.send('No orders found!');
+      }
+      else {
+              res.send(orders);
+      }
     })
     .catch(function (err) {
 
       res.send('Error: ', err);
     });
+  })
+  .catch(function (err) {
+
+    res.send('Error: ', err);
+  });
 };
 
 module.exports.cancelOrder = function (req, res) {

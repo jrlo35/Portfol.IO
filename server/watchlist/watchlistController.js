@@ -13,7 +13,7 @@ module.exports.addToWatchlist = function (req, res) {
     }
   })
   .then(function (watchlist) {
-  res.json(watchlist);
+    res.json(watchlist);
   })
   .catch(function (err) {
     res.send("There was an error: ", err);
@@ -29,7 +29,9 @@ module.exports.getWatchlist = function (req, res) {
   var userWatchlist = {};
 
   Watchlist.findAll({
-    where: {UserId: userId}
+    where: {
+      UserId: userId
+    }
   })
   .then(function (list) {
     list.forEach(function (stock) {
@@ -80,7 +82,9 @@ module.exports.removeFromWatchlist = function (req, res) {
   var symbol = req.body.symbol;
 
   Watchlist.findOne({
-    where: {UserId: userId, symbol: symbol}
+    where: {
+      UserId: userId, symbol: symbol
+    }
   })
   .then(function (stock) {
     stock.destroy();

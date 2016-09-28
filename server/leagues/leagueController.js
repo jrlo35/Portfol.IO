@@ -134,7 +134,7 @@ module.exports.getOneLeague = function (req, res) {
   .then(function (league) {
     res.send(league);
   })
-    .catch(function (err) {
+  .catch(function (err) {
     console.error('Error getting league: ', err);
     return;
   });
