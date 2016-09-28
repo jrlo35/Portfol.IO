@@ -1,44 +1,58 @@
-app.controller('LeaderBoardController', ['$scope', '$window', '$stateParams', 'DashboardFactory', 'leaderBoardFactory', '$location', '$rootScope' ,function($scope, $window, $stateParams, DashboardFactory, leaderBoardFactory, $location, $rootScope){
+(function(){
+  
+  "use strict";
 
-  $scope.leagueId = $stateParams.leagueId;
-  $scope.portfolios;
-  $scope.leagueName;
-  $scope.userId = $window.localStorage.getItem('com.tp.userId');
+  angular
+    .module('app.leaderboard', [])
+    .controller('LeaderBoardController', LeaderBoardController);
 
-  //get all portfolios in certain league
-  $scope.getLeaderBoard = function(){
-    // this will call a factory function to grab http data from server and assign returned data to $scope.members;
-    leaderBoardFactory.getPortfolios($scope.leagueId)
-      .then(function(portfolios){
+    LeaderBoardController.$inject = ['$window', '$stateParams', 'DashboardFactory', 'leaderBoardFactory', '$location', '$rootScope']
 
-        var joined = false;
-        for(var i=0; i<portfolios.length; i++){
-          if(portfolios[i].UserId === Number($scope.userId)) joined = true;
-        }
-        if(!joined) {
-          $window.location.href = '/#/dashboard';
-          Materialize.toast('You are not in the league.',1000);
-        }
+    function LeaderBoardController($window, $stateParams, DashboardFactory, leaderBoardFactory, $location, $rootScope){
+      
+      var vm = this;
 
-        $scope.portfolios = portfolios;
-        $scope.leagueName = portfolios[0].leaguename;
-        $scope.code = portfolios[0].code;
+      vm.leagueId = $stateParams.leagueId;
+      vm.portfolios;
+      vm.leagueName;
+      vm.userId = $window.localStorage.getItem('com.tp.userId');
+      vm.getLeaderBoard = getLeaderBoard;
+      vm.getLeagueById = getLeagueById;
+
+      //get all portfolios in certain league
+      function getLeaderBoard(){
+        leaderBoardFactory.getPortfolios(vm.leagueId)
+          .then(function(portfolios){
+
+            var joined = false;
+            for(var i=0; i<portfolios.length; i++){
+              if(portfolios[i].UserId === Number(vm.userId)) joined = true;
+            }
+            if(!joined) {
+              $window.location.href = '/#/dashboard';
+              Materialize.toast('You are not in the league.',1000);
+            }
+
+            vm.portfolios = portfolios;
+            vm.leagueName = portfolios[0].leaguename;
+            vm.code = portfolios[0].code;
+          });
+      };
+
+      //get private league code
+      function getLeagueById(){
+        DashboardFactory.getLeagueById(vm.leagueId).then(function(data){
+          vm.secretCode = data.code;
+        });
+      };
+
+      // once we have league ID, call to initialize leaderboard
+      vm.getLeagueById();
+      vm.getLeaderBoard();
+
+      // to update the leaderboard when users makes portfolio trxn
+      $rootScope.$on("PortfolioUpdate", function(){
+        vm.getLeaderBoard();
       });
-  };
-
-  //get private league code
-  $scope.getLeagueById = function(){
-    DashboardFactory.getLeagueById($scope.leagueId).then(function(data){
-      $scope.secretCode = data.code;
-    });
-  };
-
-  // once we have league ID, call to initialize leaderboard
-  $scope.getLeagueById();
-  $scope.getLeaderBoard();
-
-  // to update the leaderboard when users makes portfolio trxn
-  $rootScope.$on("PortfolioUpdate", function(){
-    $scope.getLeaderBoard();
-  });
-}]);
+    };
+})();

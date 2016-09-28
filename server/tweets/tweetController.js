@@ -6,9 +6,8 @@ var config = require('../config/middleware.js');
 var Promise = require('bluebird');
 
 var T = new Twit({
-    consumer_key : process.env.KEY 
-    consumer_key: 'wQX96fSNXd5Oyo0mhw0AHto5u',
-    consumer_secret: 'shbjbyIGPVpopdw5FD3o1EtQNUwbAe5aVkkKg7pziLHPlnBH9x',
+    consumer_key : process.env.consumer_key, 
+    consumer_secret: process.env.consumer_secret,
     app_only_auth: true
 });
 
@@ -22,17 +21,19 @@ module.exports.getTweets = function (req, res) {
   var userId = req.params.userId;
   var leagueId = req.params.leagueId;
 
-  Portfolio.findOne({where: {
-    UserId: userId,
-    leagueId: leagueId
-  }}).then(function (portfolio) {
-
+  Portfolio.findOne({
+    where: {
+      UserId: userId,
+      leagueId: leagueId
+    }
+  })
+  .then(function (portfolio) {
     Transaction.findAll({ 
       where: {
         PortfolioId: portfolio.id
       }
-    }).then(function (transactions) {
-
+    })
+    .then(function (transactions) {
       transactions.forEach(function (transaction) {
 
         var sym = transaction.symbol;
@@ -63,12 +64,11 @@ module.exports.getTweets = function (req, res) {
               created_at: time
             });
           }
-
           res.json(tweets);
-
         });
       }
-
+      
+      //default if no stocks in portfolio
       else {
         var search = '$AAPL OR $GOOG OR $MSFT OR $XOM OR $GE OR $WFC OR $JNJ OR $BRKA OR $JPM OR $FB';
         var params = {q: search, count: 10};

@@ -23,10 +23,10 @@
           <div ng-if="active === 'accountInfo'">
             <h5 class="center">Account Information</h5>
             <ul class="collection">
-              <li class="collection-item">Username: {{user.username}}</li>
-              <li class="collection-item">Email: {{user.email}}</li>
+              <li class="collection-item">Username: {{account.user.username}}</li>
+              <li class="collection-item">Email: {{account.user.email}}</li>
 
-              <li class="collection-item">Leagues Created: {{leagues.length}}</li>
+              <li class="collection-item">Leagues Created: {{account.leagues.length}}</li>
 
               <li class="collection-item"><p>Profile Photo:</p>
                 <span id="uploadbox">
@@ -80,9 +80,9 @@
             <ul ng-if="!editMode" class="collection">
               <li ng-repeat="league in leagues" class="collection-item avatar">
                 <img src="../assets/img/money.png" alt="" class="circle">
-                <span class="title">{{ league.name}} <span class="red-text" ng-if="league.private">(PRIVATE) - code: {{ league.code }}</span></span>
-                <p>Max Users: {{ league.maxNum }}</span><br />
-                   Starting Balance: {{ league.startbalance }}
+                <span class="title">{{ account.league.name}} <span class="red-text" ng-if="league.private">(PRIVATE) - code: {{ account.league.code }}</span></span>
+                <p>Max Users: {{ account.league.maxNum }}</span><br />
+                   Starting Balance: {{ account.league.startbalance }}
                 </p>
                 <a ng-click="selectLeague(league)" class="secondary-content clickable"><span class="teal-text">EDIT</span></a>
               </li>
@@ -90,7 +90,7 @@
             </ul>
 
             <form ng-if="editMode">
-              <button ng-click="toggleEditMode()" class="waves-effect waves-light btn std-btn center teal"><i class="material-icons">fast_rewind</i><span class="material-icons-span">BACK</span></button>
+              <button ng-click="account.toggleEditMode()" class="waves-effect waves-light btn std-btn center teal"><i class="material-icons">fast_rewind</i><span class="material-icons-span">BACK</span></button>
               <br />
               <label>Name:</label><br />
               <input type='text' ng-model='currentLeague.name' required>

@@ -1,213 +1,244 @@
-app.controller('AccountController', ['$scope', '$window', 'AccountFactory', '$location', '$rootScope', function($scope, $window, AccountFactory, $location, $rootScope){
+(function(){
 
-  $scope.name = $window.localStorage.getItem('com.tp.username');
-  $scope.id = $window.localStorage.getItem('com.tp.userId');
-  $scope.active = 'accountInfo';
-  $scope.editMode = false;
+  "use strict";
 
-  //delete user 
-  $scope.delete = function(){
-    var userid = $scope.id;
-    swal({   title: "Are you sure?",
-      text: "You will not be able to recover.",
-      type: "warning",
-      showCancelButton: true,
-      confirmButtonColor: "#DD6B55",
-      confirmButtonText: "Yes, delete it!",
-      cancelButtonText: "No, cancel please!",
-      closeOnConfirm: false,
-      closeOnCancel: false },
-      function(isConfirm){
-        if (isConfirm) {
-          swal("Deleted!",
-           "Your account has been deleted.",
-            "success");
-          AccountFactory.deleteAccount(userid);
-          $location.path('/');
-          $rootScope.$emit('deleted', {});
-        } else {
-          swal("Cancelled",
-          "Your account is safe :)",
-          "error");
-        }
-      });
-  };
+  angular
+    .module('app')
+    .controller('AccountController', AccountController);
+      
+    AccountController.$inject = ['$scope', '$window', 'AccountFactory', '$location', '$rootScope']
+    
+    function AccountController($scope, $window, AccountFactory, $location, $rootScope){
+      
+      var vm = this;
+      
+      vm.active = 'accountInfo';
+      vm.editMode = false;
+      vm.id = $window.localStorage.getItem('com.tp.userId');
+      vm.name = $window.localStorage.getItem('com.tp.username');
 
-  //get leagues by userid
-  $scope.getLeaguesByOwnerId = function(){
-    AccountFactory.getLeaguesByOwnerId($scope.id).then(function(data){
-      $scope.leagues = data;
-    });
-  };
+      vm.cancel = cancel;
+      vm.delete = deleteUser;
+      vm.deleteLeague = deleteLeague;
+      vm.editEmail = editEmail;
+      vm.editLeague = editLeague;
+      vm.editLeagues = editLeagues;
+      vm.editPW = editPW;
+      vm.getLeaguesByOwnerId = getLeaguesByOwnerId;
+      vm.getUser = getUser;
+      vm.selectLeague = selectLeague;
+      vm.showAccount = showAccount;
+      vm.toggleEditMode = toggleEditMode;
+      vm.updateEmail = updateEmail;
+      vm.updatePw = updatePW;
+      vm.upload = upload;
 
-  $scope.getLeaguesByOwnerId();
 
-  $scope.getUser = function(){
-    AccountFactory.getSingleUser($scope.id)
-      .then(function(user){
-        $scope.user = user;
-        $scope.email = user.email;
-        $scope.image = user.image;
-      });
-  };
 
-  $scope.getUser();
-
-  $scope.newemail = {};
-  $scope.newemail.userId = $scope.id;
-
-  $scope.newpw = {};
-  $scope.newpw.userId = $scope.id;
-
-  $scope.change = false;
-
-  $scope.editPW = function(){
-    $scope.active = 'updatepw';
-    resetEditMode();
-  };
-  $scope.editEmail = function(){
-    $scope.active = 'editEmail';
-    resetEditMode();
-  };
-  $scope.editLeagues = function(){
-    $scope.active = 'editLeagues';
-    resetEditMode();
-  };
-  $scope.showAccount = function(){
-    $scope.active = 'accountInfo';
-    resetEditMode();
-  };
-  $scope.cancel = function(){
-    $scope.newlogin = {};
-  };
-
-  $scope.toggleEditMode = function(){
-    if ($scope.editMode){
-      resetEditMode();
-    } else {
-      $scope.editMode = true;
-    }
-  };
-
-  function resetEditMode(){
-    $scope.editMode = false;
-    $scope.currentLeague = {};
-  }
-
-  $scope.selectLeague = function(league){
-    $scope.toggleEditMode();
-    $scope.currentLeague = league;
-  };
-
-  //edit leagues user created
-  $scope.editLeague = function(){
-    var league = $scope.currentLeague;
-
-    var start = moment(league.start).utc().hour(13).minute(30);
-    var end = moment(league.end).utc().hour(20);
-    league.start = start.format();
-    league.end = end.format();
-
-    console.log('league being sent', league);
-
-    AccountFactory.editOneLeague(league.id, league).then(function(league){
-      console.log('factory callback', league);
-
-      swal('League Updated!', 'Everyone wants to play but nobody wants to organize the game. Good job!');
-    });
-  };
-
-  //clear out input box
-  var clearemailupdate = function(){
-    $scope.newemail.email = '';
-    $scope.newemail.confirmemail = '';
-    $scope.newemail.password = '';
-  };
-
-  //clear out input box
-  var clearpwupdate = function(){
-    $scope.newpw.newpw = '';
-    $scope.newpw.oldpw = '';
-    $scope.newpw.confirmnewpw = '';
-  };
-
-  //allow user to update email
-  $scope.updateEmail = function(newemail){
-    if(newemail.email !== newemail.confirmemail){
-      Materialize.toast('Email did not match.', 2000);
-      return;
-    }
-    AccountFactory.updateEmail($scope.newemail)
-      .then(function(user){
-        if(user === 'Wrong password' ){
-          Materialize.toast('Incorrect Password!.', 2000);
-        }else if(user === 'Email taken'){
-          Materialize.toast('Email is already taken.', 2000);
-        }else if(user === 'Email updated'){
-          Materialize.toast('Email updated', 2000);
-          clearemailupdate();
-        }else{
-          Materialize.toast('No user found!', 2000);
-        }
-      });
-  };
-
-  //allow user to update password
-  $scope.updatePW = function(newpw){
-    if(newpw.newpw !== newpw.confirmnewpw){
-      Materialize.toast('New passwords do not match.', 2000);
-      return;
-    }
-    AccountFactory.updatePW($scope.newpw)
-      .then(function(user){
-        if(user === 'Wrong password' ){
-          Materialize.toast('Incorrect Password!.', 2000);
-        }else if(user === 'Password updated'){
-          Materialize.toast('Password updated', 2000);
-          clearpwupdate();
-        }else{
-          Materialize.toast('No user found!', 2000);
-        }
-      });
-  };
-
-  //delete leagues user created
-  $scope.deleteLeague = function(){
-    swal({title: "Are you sure?",
-          text: "All associated portfolios and transactions will also be removed",
+      //delete user 
+      function deleteUser(){
+        var userid = vm.id;
+        swal({   title: "Are you sure?",
+          text: "You will not be able to recover.",
           type: "warning",
           showCancelButton: true,
           confirmButtonColor: "#DD6B55",
           confirmButtonText: "Yes, delete it!",
-          closeOnConfirm: false },
-          function(){
-            swal("Deleted!", "Your league has been deleted!", "success");
-            AccountFactory.deleteLeagueById($scope.currentLeague.id)
-              .then(function(data){
-                $scope.getLeaguesByOwnerId();
-                $scope.toggleEditMode();
-              });
+          cancelButtonText: "No, cancel please!",
+          closeOnConfirm: false,
+          closeOnCancel: false },
+          function(isConfirm){
+            if (isConfirm) {
+              swal("Deleted!",
+               "Your account has been deleted.",
+                "success");
+              AccountFactory.deleteAccount(userid);
+              $location.path('/');
+              $rootScope.$emit('deleted', {});
+            } else {
+              swal("Cancelled",
+              "Your account is safe :)",
+              "error");
+            }
           });
-  };
+      };
 
-  //update user profile image
-  $scope.upload = function (file) {
-    var r = new FileReader();
-    r.onload = function(){
-      AccountFactory.profileImage({
-        image: r.result,
-        userId: $scope.id
-      })
-        .then(function (resp) {
-            Materialize.toast('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data, 5000);
-        }, function (resp) {
-            Materialize.toast('Error', 5000);
-        }, function (evt) {
-            var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+      //get leagues by userid
+      function getLeaguesByOwnerId(){
+        AccountFactory.getLeaguesByOwnerId(vm.id).then(function(data){
+          vm.leagues = data;
         });
-    };
-    r.readAsDataURL(file);
-    $scope.file = file;
-  };
+      };
 
-}]);
+      vm.getLeaguesByOwnerId();
+
+      function getUser(){
+        AccountFactory.getSingleUser($vm.id)
+          .then(function(user){
+            vm.user = user;
+            vm.email = user.email;
+            vm.image = user.image;
+          });
+      };
+
+      vm.getUser();
+
+      vm.newemail = {};
+      vm.newemail.userId = vm.id;
+
+      vm.newpw = {};
+      vm.newpw.userId = vm.id;
+
+      vm.change = false;
+
+      function editPW(){
+        vm.active = 'updatepw';
+        resetEditMode();
+      };
+      function editEmail(){
+        vm.active = 'editEmail';
+        resetEditMode();
+      };
+      function editLeagues(){
+        vm.active = 'editLeagues';
+        resetEditMode();
+      };
+      function showAccount(){
+        vm.active = 'accountInfo';
+        resetEditMode();
+      };
+      function cancel(){
+        vm.newlogin = {};
+      };
+
+      function toggleEditMode(){
+        if (vm.editMode){
+          resetEditMode();
+        } else {
+          vm.editMode = true;
+        }
+      };
+
+      function resetEditMode(){
+        vm.editMode = false;
+        vm.currentLeague = {};
+      }
+
+      function selectLeague(league){
+        vm.toggleEditMode();
+        vm.currentLeague = league;
+      };
+
+      //edit leagues user created
+      function editLeague(){
+        var league = vm.currentLeague;
+
+        var start = moment(league.start).utc().hour(13).minute(30);
+        var end = moment(league.end).utc().hour(20);
+        league.start = start.format();
+        league.end = end.format();
+
+        console.log('league being sent', league);
+
+        AccountFactory.editOneLeague(league.id, league).then(function(league){
+          console.log('factory callback', league);
+
+          swal('League Updated!', 'Everyone wants to play but nobody wants to organize the game. Good job!');
+        });
+      };
+
+      //clear out input box
+      function clearemailupdate(){
+        vm.newemail.email = '';
+        vm.newemail.confirmemail = '';
+        vm.newemail.password = '';
+      };
+
+      //clear out input box
+      function clearpwupdate(){
+        vm.newpw.newpw = '';
+        vm.newpw.oldpw = '';
+        vm.newpw.confirmnewpw = '';
+      };
+
+      //allow user to update email
+      function updateEmail(newemail){
+        if(newemail.email !== newemail.confirmemail){
+          Materialize.toast('Email did not match.', 2000);
+          return;
+        }
+        AccountFactory.updateEmail(vm.newemail)
+          .then(function(user){
+            if(user === 'Wrong password' ){
+              Materialize.toast('Incorrect Password!.', 2000);
+            }else if(user === 'Email taken'){
+              Materialize.toast('Email is already taken.', 2000);
+            }else if(user === 'Email updated'){
+              Materialize.toast('Email updated', 2000);
+              clearemailupdate();
+            }else{
+              Materialize.toast('No user found!', 2000);
+            }
+          });
+      };
+
+      //allow user to update password
+      function updatePW(newpw){
+        if(newpw.newpw !== newpw.confirmnewpw){
+          Materialize.toast('New passwords do not match.', 2000);
+          return;
+        }
+        AccountFactory.updatePW(vm.newpw)
+          .then(function(user){
+            if(user === 'Wrong password' ){
+              Materialize.toast('Incorrect Password!.', 2000);
+            }else if(user === 'Password updated'){
+              Materialize.toast('Password updated', 2000);
+              clearpwupdate();
+            }else{
+              Materialize.toast('No user found!', 2000);
+            }
+          });
+      };
+
+      //delete leagues user created
+      function deleteLeague(){
+        swal({title: "Are you sure?",
+              text: "All associated portfolios and transactions will also be removed",
+              type: "warning",
+              showCancelButton: true,
+              confirmButtonColor: "#DD6B55",
+              confirmButtonText: "Yes, delete it!",
+              closeOnConfirm: false },
+              function(){
+                swal("Deleted!", "Your league has been deleted!", "success");
+                AccountFactory.deleteLeagueById(vm.currentLeague.id)
+                  .then(function(data){
+                    vm.getLeaguesByOwnerId();
+                    vm.toggleEditMode();
+                  });
+              });
+      };
+
+      //update user profile image
+      function upload(file) {
+        var r = new FileReader();
+        r.onload = function(){
+          AccountFactory.profileImage({
+            image: r.result,
+            userId: vm.id
+          })
+            .then(function (resp) {
+                Materialize.toast('Success ' + resp.config.data.file.name + 'uploaded. Response: ' + resp.data, 5000);
+            }, function (resp) {
+                Materialize.toast('Error', 5000);
+            }, function (evt) {
+                var progressPercentage = parseInt(100.0 * evt.loaded / evt.total);
+            });
+        };
+        r.readAsDataURL(file);
+        vm.file = file;
+      };
+
+    };
+})();

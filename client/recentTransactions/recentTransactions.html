@@ -8,8 +8,6 @@
    <div class="card-content black-text">
      <div class="leaderboard-container" style="height: 300px;
        overflow-x: auto;" scroll-directive="posts">
-
-
        <table class="centered" style="padding-bottom: 15px; float:top">
         <thead>
           <tr>
@@ -20,7 +18,7 @@
               <th data-field="Time">Time</th>
           </tr>
         </thead>
-         <tbody ng-repeat="transaction in transactions | reverse">
+         <tbody ng-repeat="transaction in recent.transactions | reverse">
            <tr class="recentTransactions">
              <td>
               {{transaction.portfolioid}}
@@ -30,16 +28,13 @@
               <span ng-show="transaction.buysell > 0"> bought</span>
               <span ng-show="transaction.buysell < 0"> sold </span>
              </td>
-
              <td>
               {{transaction.buysell | negative}}
              </td>
-
              <td>
-             <span ng-show='transaction.buysell > 1 || transaction.buysell < -1'></span>
+             <span ng-show="transaction.buysell > 1 || transaction.buysell < -1"></span>
              {{transaction.symbol}}
              </td>
-
              <td>{{ transaction.time }} </td>
            </tr>
          </tbody>

@@ -65,6 +65,7 @@ module.exports.getStocks = function (req,res) {
   var results = [];
   var portfolioIds = req.body.ids;
 
+  //find all transactions across all of users portfolios
   Transaction.findAll({
     where: {
       PortfolioId: {

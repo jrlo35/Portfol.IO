@@ -3,7 +3,22 @@
   "use strict";
 
   angular
-    .module('app', ['ui.router', 'app.dashboard', 'app.portfolio', 'app.botbar', 'app.leagueResults', 'ngFileUpload', 'app.profile', 'angularCharts', 'ngSanitize']);
+    .module('app', [
+      'ui.router',
+      'app.dashboard', 
+      'app.portfolio', 
+      'app.botbar', 
+      'app.leagueResults',
+      'app.leaderboard',
+      'app.news',
+      'app.recentTransactions',
+      'app.symbol',
+      'app.ticker',
+      'app.watchlist', 
+      'ngFileUpload', 
+      'app.profile', 
+      'angularCharts', 
+      'ngSanitize']);
     .config(configure);
 
     configure.$inject = ['$stateProvider', '$urlRouterProvider', '$httpProvider'];
@@ -26,12 +41,6 @@
           authenticate: true,
           controller: 'WatchlistController',
           templateUrl: 'watchlist/watchlist.html'
-        })
-
-        .state('ticker',{
-          url:'/ticker',
-          controller: 'tickerController',
-          templateUrl:'ticker/ticker.html'
         })
 
         .state('dashboard', {
@@ -77,6 +86,7 @@
           url: '/account',
           authenticate: true,
           controller: 'AccountController',
+          controllerAs: 'controller',
           templateUrl: 'account/account.html'
         })
 
@@ -125,31 +135,37 @@
             // news/analysis view within league page
             'news@league': {
               controller: 'NewsController',
+              controllerAs: 'news',
               templateUrl: 'news/news.html'
             },
             // recent transactions view within league page
             'recentTransactions@league': {
               controller: 'recentTransactionsController',
+              controllerAs: 'recent',
               templateUrl: 'recentTransactions/recentTransactions.html'
             },
             // message board view within league page
             'messageboard@league': {
               controller: 'MessageBoardController',
+              controllerAs: 'messageboard',
               templateUrl: 'messageboard/messageboard.html'
             },
             // league results view within league page
             'leagueResults@league': {
               controller: 'LeagueResultsController',
+              controllerAs: 'results',
               templateUrl: 'leagueResults/leagueResults.html'
             },
             // before league starts view within league page
             'preleague@league': {
               controller: 'PreLeagueController',
+              controllerAs: 'preleague',
               templateUrl: 'preleague/preleague.html'
             },
             // symbol lookup modal view
             'symbol@league':{
               controller: 'SymbolController',
+              controllerAs: 'symbol',
               templateUrl: 'symbol/symbol.html'
             }
           }
