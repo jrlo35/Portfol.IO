@@ -18,7 +18,7 @@ A full-featured application, with Portfol.io you can:
 Portfol.io is designed with the beginner and the expert in mind. If someone is completely new to stock trading, Portfol.io is the perfect place to start, since you are using real, timely data, but you aren't using real money. If a teacher wanted to teach her class about the stock market , she could leverage Portofol.io to create a fun, engaging experience. Lastly, if you're an experienced trader with years under the belt, Portol.io is a way for you to try your skills out competitively, against friends and strangers.  
 
 ### How to Get Started
-It's easy. Head over to [our website](http://portfolioio.herokuapp.com), sign up and you're ready. Once logged in, you'll see the available leagues to join, or, if you're feeling adventurous, you can make your own private league and invite your friends.
+It's easy. Head over to [our website](http://portfolioio.herokuapp.com), sign up and you're ready. Once logged in, you'll see the available leagues to join, or, if you're feeling adventurous, you can make your own private league and invite your friends. If you want to browse around login with email: j@j.com password: j click on Dashboard and click on Elite Broker League. 
 
 ### Why did we make Portfol.io?
 Portfol.io fills a gap. For beginners, there aren't a lot of tools out there that will teach about the stock market that are either a) simple enough or b) free, as in, we aren't taking any of your money, and free, as in, you aren't investing real dollars. And because we've crafted a environment that relies on actual, realtime data from the NYSE, you can rest assured that you're getting an authentic experience.
